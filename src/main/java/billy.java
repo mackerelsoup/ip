@@ -16,19 +16,20 @@ public class billy {
         System.out.println("What can I do for you?");
         divider();
 
-        String line;
+        String line, lowerLine;
 
         do {
             System.out.print("Your input: ");
             line = input.nextLine();
+            lowerLine = line.toLowerCase();
 
-            if (!line.equals("bye")) {
+            if (!lowerLine.equals("bye")) {
                 divider();
                 System.out.println("billy: " + line);
                 divider();
             }
 
-        } while (!line.equals("bye"));
+        } while (!lowerLine.equals("bye"));
 
         divider();
         System.out.println("Bye. Hope to see you again soon!");

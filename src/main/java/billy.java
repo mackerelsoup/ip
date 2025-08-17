@@ -17,11 +17,18 @@ public class billy {
         divider();
 
         String line;
-        while(!(line = input.nextLine()).equals("bye")) {
-            divider();
-            System.out.println(line);
-            divider();
-        }
+
+        do {
+            System.out.print("Your input: ");
+            line = input.nextLine();
+
+            if (!line.equals("bye")) {
+                divider();
+                System.out.println("billy: " + line);
+                divider();
+            }
+
+        } while (!line.equals("bye"));
 
         divider();
         System.out.println("Bye. Hope to see you again soon!");

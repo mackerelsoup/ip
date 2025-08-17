@@ -49,7 +49,7 @@ public class billy {
                     tasks[markIndex - 1].printStatus();
                 } else if (firstWord.equals("unmark")) {
                     markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1));
-                    tasks[markIndex - 1].setDone();
+                    tasks[markIndex - 1].setUndone();
                     System.out.println("Nice! I've marked this task as not done yet:");
                     System.out.print("   ");
                     tasks[markIndex - 1].printStatus();

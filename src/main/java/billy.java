@@ -17,8 +17,6 @@ public class billy {
         divider();
 
         String line, lowerLine, firstWord;
-        String[] memory = new String[100];
-        boolean[] done = new boolean[100];
         Task[] tasks = new Task[100];
         int index = 0;
 

@@ -17,6 +17,8 @@ public class billy {
         divider();
 
         String line, lowerLine;
+        String[] memory = new String[100];
+        int index = 0;
 
         do {
             System.out.print("Your input: ");
@@ -24,9 +26,20 @@ public class billy {
             lowerLine = line.toLowerCase();
 
             if (!lowerLine.equals("bye")) {
-                divider();
-                System.out.println("billy: " + line);
-                divider();
+
+                if (lowerLine.equals("list")) {
+                    divider();
+                    for (int i = 0; i < index; ++i) {
+                        System.out.println((i + 1) + ". " + memory[i]);
+                    }
+                    divider();
+                }
+                else {
+                    memory[index++] = line;
+                    divider();
+                    System.out.println("added: " + line);
+                    divider();
+                }
             }
 
         } while (!lowerLine.equals("bye"));

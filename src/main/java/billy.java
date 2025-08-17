@@ -68,7 +68,7 @@ public class billy {
                     int toIndex = lowerLine.indexOf("/to");
                     String description = lowerLine.substring(spaceIndex + 1, fromIndex - 1);
                     String eventStart = lowerLine.substring(fromIndex + 6, toIndex - 1);
-                    String eventEnd = lowerLine.substring(toIndex + 3);
+                    String eventEnd = lowerLine.substring(toIndex + 4);
                     tasks[index++] = new Events(description, eventStart, eventEnd);
                     System.out.print("    ");
                     tasks[index - 1].printStatus();

@@ -8,6 +8,6 @@ public class Deadlines extends Task{
 
     @Override
     public void printStatus() {
-        System.out.printf("[D][%s] %s (by: %s)", getStatusIcon(), this.description, this.deadline);
+        System.out.printf("[D][%s] %s (by: %s)\n", getStatusIcon(), this.description, this.deadline);
     }
 }

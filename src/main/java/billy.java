@@ -41,25 +41,45 @@ public class billy {
                         System.out.printf("%d.", i + 1);
                         tasks[i].printStatus();
                     }
-                }
-                else if (firstWord.equals("mark")) {
+                } else if (firstWord.equals("mark")) {
                     markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1));
                     tasks[markIndex - 1].setDone();
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.print("   ");
                     tasks[markIndex - 1].printStatus();
-                }
-                else if (firstWord.equals("unmark")) {
+                } else if (firstWord.equals("unmark")) {
                     markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1));
                     tasks[markIndex - 1].setDone();
                     System.out.println("Nice! I've marked this task as not done yet:");
                     System.out.print("   ");
                     tasks[markIndex - 1].printStatus();
-                }
-                else {
-                    tasks[index++] = new Task(line);
-                    System.out.println("added: " + line);
-
+                } else if (firstWord.equals("deadline")) {
+                    System.out.println("Got it. I've added this task:");
+                    int byIndex = lowerLine.indexOf("/by");
+                    String description = lowerLine.substring(spaceIndex + 1, byIndex - 1);
+                    String deadline = lowerLine.substring(byIndex + 4);
+                    tasks[index++] = new Deadlines(description, deadline);
+                    System.out.print("    ");
+                    tasks[index - 1].printStatus();
+                    System.out.println("Now you have " + index + " tasks in the list");
+                } else if (firstWord.equals("event")) {
+                    System.out.println("Got it. I've added this task:");
+                    int fromIndex = lowerLine.indexOf("/from");
+                    int toIndex = lowerLine.indexOf("/to");
+                    String description = lowerLine.substring(spaceIndex + 1, fromIndex - 1);
+                    String eventStart = lowerLine.substring(fromIndex + 6, toIndex - 1);
+                    String eventEnd = lowerLine.substring(toIndex + 3);
+                    tasks[index++] = new Events(description, eventStart, eventEnd);
+                    System.out.print("    ");
+                    tasks[index - 1].printStatus();
+                    System.out.println("Now you have " + index + " tasks in the list");
+                } else if (firstWord.equals("todo")) {
+                    System.out.println("Got it. I've added this task:");
+                    String description = lowerLine.substring(5);
+                    tasks[index++] = new ToDos(description);
+                    System.out.print("    ");
+                    tasks[index - 1].printStatus();
+                    System.out.println("Now you have " + index + " tasks in the list");
                 }
                 divider();
             }

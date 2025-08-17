@@ -10,6 +10,6 @@ public class Events extends Task{
 
     @Override
     public void printStatus() {
-        System.out.printf("[E][%s] %s (from: %s to: %s )", getStatusIcon(), this.description, this.eventStart, this.eventEnd);
+        System.out.printf("[E][%s] %s (from: %s to: %s)\n", getStatusIcon(), this.description, this.eventStart, this.eventEnd);
     }
 }

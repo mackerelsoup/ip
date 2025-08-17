@@ -19,6 +19,7 @@ public class billy {
         String line, lowerLine, firstWord;
         String[] memory = new String[100];
         boolean[] done = new boolean[100];
+        Task[] tasks = new Task[100];
         int index = 0;
 
         do {
@@ -38,27 +39,26 @@ public class billy {
                 divider();
                 if (lowerLine.equals("list")) {
                     for (int i = 0; i < index; ++i) {
-                        char marked = ' ';
-                        if (done[i])
-                            marked = 'X';
-                        System.out.printf("%d.[%c] %s \n", i + 1, marked, memory[i]);
+                        System.out.printf("%d.", i + 1);
+                        tasks[i].printStatus();
                     }
                 }
                 else if (firstWord.equals("mark")) {
                     markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1));
-                    done[markIndex - 1] = true;
+                    tasks[markIndex - 1].setDone();
                     System.out.println("Nice! I've marked this task as done:");
-                    System.out.printf("   [X] %s\n", memory[markIndex - 1]);
+                    System.out.print("   ");
+                    tasks[markIndex - 1].printStatus();
                 }
                 else if (firstWord.equals("unmark")) {
                     markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1));
-                    done[markIndex - 1] = false;
+                    tasks[markIndex - 1].setDone();
                     System.out.println("Nice! I've marked this task as not done yet:");
-                    System.out.printf("   [] %s\n", memory[markIndex - 1]);
+                    System.out.print("   ");
+                    tasks[markIndex - 1].printStatus();
                 }
                 else {
-                    memory[index++] = line;
-                    done[index] = false;
+                    tasks[index++] = new Task(line);
                     System.out.println("added: " + line);
 
                 }

@@ -20,6 +20,6 @@ public class Task {
     }
 
     public void printStatus() {
-        System.out.printf("[%s] %s\n", getStatusIcon(), this.description);
+        System.out.printf("[T][%s] %s\n", getStatusIcon(), this.description);
     }
 }

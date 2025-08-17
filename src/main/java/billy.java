@@ -25,7 +25,7 @@ public class billy {
             line = input.nextLine();
             lowerLine = line.toLowerCase();
             int spaceIndex = lowerLine.indexOf(' ');
-            int markIndex = 99;
+            int markIndex;
             if (spaceIndex != -1) {
                 firstWord = lowerLine.substring(0, spaceIndex);
             } else {
@@ -36,6 +36,7 @@ public class billy {
             if (!lowerLine.equals("bye")) {
                 divider();
                 if (lowerLine.equals("list")) {
+                    System.out.println("Here are the tasks in your list");
                     for (int i = 0; i < index; ++i) {
                         System.out.printf("%d.", i + 1);
                         tasks[i].printStatus();

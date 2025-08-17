@@ -16,30 +16,52 @@ public class billy {
         System.out.println("What can I do for you?");
         divider();
 
-        String line, lowerLine;
+        String line, lowerLine, firstWord;
         String[] memory = new String[100];
+        boolean[] done = new boolean[100];
         int index = 0;
 
         do {
             System.out.print("Your input: ");
             line = input.nextLine();
             lowerLine = line.toLowerCase();
+            int spaceIndex = lowerLine.indexOf(' ');
+            int markIndex = 99;
+            if (spaceIndex != -1) {
+                firstWord = lowerLine.substring(0, spaceIndex);
+                markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1));
+            } else {
+                firstWord = lowerLine;
+            }
+
 
             if (!lowerLine.equals("bye")) {
-
+                divider();
                 if (lowerLine.equals("list")) {
-                    divider();
                     for (int i = 0; i < index; ++i) {
-                        System.out.println((i + 1) + ". " + memory[i]);
+                        char marked = ' ';
+                        if (done[i])
+                            marked = 'X';
+                        System.out.printf("%d.[%c] %s \n", i + 1, marked, memory[i]);
                     }
-                    divider();
+                }
+                else if (firstWord.equals("mark")) {
+                    done[markIndex - 1] = true;
+                    System.out.println("Nice! I've marked this task as done:");
+                    System.out.printf("   [X] %s\n", memory[markIndex - 1]);
+                }
+                else if (firstWord.equals("unmark")) {
+                    done[markIndex - 1] = false;
+                    System.out.println("Nice! I've marked this task as not done yet:");
+                    System.out.printf("   [] %s\n", memory[markIndex - 1]);
                 }
                 else {
                     memory[index++] = line;
-                    divider();
+                    done[index] = false;
                     System.out.println("added: " + line);
-                    divider();
+
                 }
+                divider();
             }
 
         } while (!lowerLine.equals("bye"));

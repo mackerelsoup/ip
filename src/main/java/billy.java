@@ -29,7 +29,6 @@ public class billy {
             int markIndex = 99;
             if (spaceIndex != -1) {
                 firstWord = lowerLine.substring(0, spaceIndex);
-                markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1));
             } else {
                 firstWord = lowerLine;
             }
@@ -46,11 +45,13 @@ public class billy {
                     }
                 }
                 else if (firstWord.equals("mark")) {
+                    markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1));
                     done[markIndex - 1] = true;
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.printf("   [X] %s\n", memory[markIndex - 1]);
                 }
                 else if (firstWord.equals("unmark")) {
+                    markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1));
                     done[markIndex - 1] = false;
                     System.out.println("Nice! I've marked this task as not done yet:");
                     System.out.printf("   [] %s\n", memory[markIndex - 1]);

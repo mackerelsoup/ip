@@ -1,13 +1,15 @@
 public class Events extends Task{
-    protected String eventPeriod;
+    protected String eventStart;
+    protected String eventEnd;
 
-    public Events(String description, String eventPeriod) {
+    public Events(String description, String eventStart, String eventEnd) {
         super(description);
-        this.eventPeriod = eventPeriod;
+        this.eventStart = eventStart;
+        this.eventEnd = eventEnd;
     }
 
     @Override
     public void printStatus() {
-        System.out.printf("[E][%s] %s (from: %s)", getStatusIcon(), this.description, this.eventPeriod);
+        System.out.printf("[E][%s] %s (from: %s to: %s )", getStatusIcon(), this.description, this.eventStart, this.eventEnd);
     }
 }

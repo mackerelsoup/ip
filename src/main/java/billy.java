@@ -7,6 +7,14 @@ public class billy {
         System.out.println(divider);
     }
 
+    public static void addTask(Task[] tasks, int index, Task newTask) {
+        tasks[index] = newTask;
+        System.out.println("Got it. I've added this task:");
+        System.out.print("    ");
+        tasks[index].printStatus();
+        System.out.println("Now you have " + (index + 1) + " tasks in the list");
+    }
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
@@ -26,6 +34,8 @@ public class billy {
             lowerLine = line.toLowerCase();
             int spaceIndex = lowerLine.indexOf(' ');
             int markIndex;
+
+
             if (spaceIndex != -1) {
                 firstWord = lowerLine.substring(0, spaceIndex);
             } else {
@@ -54,32 +64,21 @@ public class billy {
                     System.out.print("   ");
                     tasks[markIndex - 1].printStatus();
                 } else if (firstWord.equals("deadline")) {
-                    System.out.println("Got it. I've added this task:");
                     int byIndex = lowerLine.indexOf("/by");
                     String description = line.substring(spaceIndex + 1, byIndex - 1);
                     String deadline = line.substring(byIndex + 4);
-                    tasks[index++] = new Deadlines(description, deadline);
-                    System.out.print("    ");
-                    tasks[index - 1].printStatus();
-                    System.out.println("Now you have " + index + " tasks in the list");
+                    addTask(tasks, index++, new Deadlines(description, deadline));
                 } else if (firstWord.equals("event")) {
-                    System.out.println("Got it. I've added this task:");
                     int fromIndex = lowerLine.indexOf("/from");
                     int toIndex = lowerLine.indexOf("/to");
                     String description = line.substring(spaceIndex + 1, fromIndex - 1);
                     String eventStart = line.substring(fromIndex + 6, toIndex - 1);
                     String eventEnd = line.substring(toIndex + 4);
-                    tasks[index++] = new Events(description, eventStart, eventEnd);
-                    System.out.print("    ");
-                    tasks[index - 1].printStatus();
-                    System.out.println("Now you have " + index + " tasks in the list");
+                    addTask(tasks, index++, new Events(description, eventStart, eventEnd));
+
                 } else if (firstWord.equals("todo")) {
-                    System.out.println("Got it. I've added this task:");
                     String description = line.substring(5);
-                    tasks[index++] = new ToDos(description);
-                    System.out.print("    ");
-                    tasks[index - 1].printStatus();
-                    System.out.println("Now you have " + index + " tasks in the list");
+                    addTask(tasks, index++, new ToDos(description));
                 }
                 divider();
             }

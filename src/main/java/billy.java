@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class billy {
 
@@ -7,11 +8,11 @@ public class billy {
         System.out.println(divider);
     }
 
-    public static void addTask(Task[] tasks, int index, Task newTask) {
-        tasks[index] = newTask;
+    public static void addTask(ArrayList<Task> tasks, int index, Task newTask) {
+        tasks.add(newTask);
         System.out.println("Got it. I've added this task:");
         System.out.print("    ");
-        tasks[index].printStatus();
+        tasks.get(index).printStatus();
         System.out.println("Now you have " + (index + 1) + " tasks in the list");
     }
 
@@ -25,7 +26,7 @@ public class billy {
         divider();
 
         String line, lowerLine, firstWord;
-        Task[] tasks = new Task[100];
+        ArrayList<Task> tasks = new ArrayList<>();
         int index = 0;
 
         do {
@@ -51,7 +52,7 @@ public class billy {
                         System.out.println("Here are the tasks in your list");
                         for (int i = 0; i < index; ++i) {
                             System.out.printf("%d.", i + 1);
-                            tasks[i].printStatus();
+                            tasks.get(i).printStatus();
                         }
                     } else if (firstWord.equals("mark")) {
                         if (spaceIndex == -1) {
@@ -62,10 +63,10 @@ public class billy {
                         if (markIndex > index) {
                             throw new ArrayIndexOutOfBoundsException("");
                         }
-                        tasks[markIndex - 1].setDone();
+                        tasks.get(markIndex - 1).setDone();
                         System.out.println("Nice! I've marked this task as done:");
                         System.out.print("   ");
-                        tasks[markIndex - 1].printStatus();
+                        tasks.get(markIndex - 1).printStatus();
                     } else if (firstWord.equals("unmark")) {
                         if (spaceIndex == -1) {
                             throw new IllegalArgumentException("Specify task number");
@@ -74,10 +75,10 @@ public class billy {
                         if (markIndex > index) {
                             throw new ArrayIndexOutOfBoundsException("");
                         }
-                        tasks[markIndex - 1].setUndone();
+                        tasks.get(markIndex - 1).setUndone();
                         System.out.println("Nice! I've marked this task as not done yet:");
                         System.out.print("   ");
-                        tasks[markIndex - 1].printStatus();
+                        tasks.get(markIndex - 1).printStatus();
                     } else if (firstWord.equals("deadline")) {
                         int byIndex = lowerLine.indexOf("/by");
                         if (byIndex == -1) {

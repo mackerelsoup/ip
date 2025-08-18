@@ -1,0 +1,25 @@
+todo read chapter 5
+deadline finish homework /by 2025-08-19
+event team sync /from Tue 9am /to Tue 10am
+todo buy groceries
+deadline submit project report /by Friday
+event client meeting /from Wed 1pm /to Wed 2pm
+list
+mark 2
+unmark 1
+delete 3
+todo
+deadline /by tomorrow
+event team lunch /from /to 1pm
+todo clean room
+deadline do exercises /by
+event project kickoff /from Mon 2pm /to
+todo borrow book
+list
+mark 5
+unmark 10
+deadline practice piano /by Sat 5pm
+event presentation /from Thu 3pm /to Thu 4pm
+todo water plants
+delete 20
+bye

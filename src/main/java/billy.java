@@ -19,30 +19,20 @@ public class billy {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        //actual code
         divider();
         System.out.println("Hello, I'm billy");
         System.out.println("What can I do for you?");
         divider();
 
-        String line, lowerLine, firstWord;
+        String line;
         ArrayList<Task> tasks = new ArrayList<>();
         int index = 0;
 
         do {
             System.out.print("Your input: ");
             line = input.nextLine();
-            lowerLine = line.toLowerCase();
-            int spaceIndex = lowerLine.indexOf(' ');
-            int markIndex;
-
-
-            if (spaceIndex != -1) {
-                firstWord = lowerLine.substring(0, spaceIndex);
-            } else {
-                firstWord = lowerLine;
-            }
-
+            String lowerLine = line.toLowerCase();
+            String[] parts = lowerLine.split("\\s+", 2);
 
             if (!lowerLine.equals("bye")) {
                 divider();
@@ -54,77 +44,78 @@ public class billy {
                             System.out.printf("%d.", i + 1);
                             tasks.get(i).printStatus();
                         }
-                    } else if (firstWord.equals("mark")) {
-                        if (spaceIndex == -1) {
+                    }
+                    else if (parts[0].equals("mark") || parts[0].equals("unmark") ||
+                            parts[0].equals("delete")) {
+                        if (parts.length < 2) {
                             throw new IllegalArgumentException("Specify task number");
                         }
 
-                        markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1).trim());
-                        if (markIndex > index) {
+                        int taskIndex = Integer.parseInt(parts[1].trim());
+                        if (taskIndex > index || taskIndex < 1) {
                             throw new ArrayIndexOutOfBoundsException("");
                         }
-                        tasks.get(markIndex - 1).setDone();
-                        System.out.println("Nice! I've marked this task as done:");
+
+                        if (parts[0].equals("mark")) {
+                            tasks.get(taskIndex - 1).setDone();
+                            System.out.println("Nice! I've marked this task as done:");
+                        }
+                        else if (parts[0].equals("unmark")) {
+                            tasks.get(taskIndex - 1).setUndone();
+                            System.out.println("Nice! I've marked this task as not done yet:");
+                        }
+                        else {
+                            System.out.println("Noted I've removed this task:");
+                            tasks.remove(taskIndex - 1);
+                            --index;
+                            System.out.println("Now you have " + index + " tasks in the list");
+                            continue;
+                        }
                         System.out.print("   ");
-                        tasks.get(markIndex - 1).printStatus();
-                    } else if (firstWord.equals("unmark")) {
-                        if (spaceIndex == -1) {
-                            throw new IllegalArgumentException("Specify task number");
-                        }
-                        markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1).trim());
-                        if (markIndex > index) {
-                            throw new ArrayIndexOutOfBoundsException("");
-                        }
-                        tasks.get(markIndex - 1).setUndone();
-                        System.out.println("Nice! I've marked this task as not done yet:");
-                        System.out.print("   ");
-                        tasks.get(markIndex - 1).printStatus();
-                    } else if (firstWord.equals("delete")) {
-                        if (spaceIndex == -1) {
-                            throw new IllegalArgumentException("Specify task number to be deleted");
-                        }
-                        markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1).trim());
-                        if (markIndex > index) {
-                            throw new ArrayIndexOutOfBoundsException("");
-                        }
-                        System.out.println("Noted I've removed this task:");
-                        System.out.print("   ");
-                        tasks.get(markIndex - 1).printStatus();
-                        tasks.remove(markIndex - 1);
-                        --index;
-                        System.out.println("Now you have " + (index) + " tasks in the list");
-                    } else if (firstWord.equals("deadline")) {
-                        int byIndex = lowerLine.indexOf("/by");
-                        if (byIndex == -1) {
+                        tasks.get(taskIndex - 1).printStatus();
+                    }
+                    else if (parts[0].equals("deadline")) {
+                        if (parts.length < 2) {
                             throw new IllegalArgumentException("Use the proper syntax: deadline <description> /by <deadline>");
                         }
-                        String description = line.substring(spaceIndex + 1, byIndex).trim();
-                        String deadline = line.substring(byIndex + 4).trim();
-                        if (description.isEmpty())
-                            throw new IllegalArgumentException("Deadline description cannot be empty");
-                        addTask(tasks, index++, new Deadlines(description, deadline));
-                    } else if (firstWord.equals("event")) {
-                        int fromIndex = lowerLine.indexOf("/from");
-                        int toIndex = lowerLine.indexOf("/to");
-                        if (fromIndex == -1 || toIndex == -1) {
-                            throw new IllegalArgumentException("Use the proper syntax: event <description> /from <start> /to <end");
-                        }
-                        String description = line.substring(spaceIndex + 1, fromIndex).trim();
-                        String eventStart = line.substring(fromIndex + 6, toIndex).trim();
-                        String eventEnd = line.substring(toIndex + 4);
-                        if (description.isEmpty()) throw new IllegalArgumentException("Event description cannot be empty");
-                        addTask(tasks, index++, new Events(description, eventStart, eventEnd));
 
-                    } else if (firstWord.equals("todo")) {
-                        if (line.length() < 5) {
-                            throw new IllegalArgumentException("Please enter a description");
+                        String[] deadlineParts = parts[1].split("/by", 2);
+                        if (deadlineParts.length < 2) {
+                            throw new IllegalArgumentException("Use the proper syntax: deadline <description> /by <deadline>");
                         }
-                        String description = line.substring(5).trim();
+
+                        String description = deadlineParts[0].trim();
+                        String deadline = deadlineParts[1].trim();
                         if (description.isEmpty()) {
+                            throw new IllegalArgumentException("Deadline description cannot be empty");
+                        }
+                        addTask(tasks, index++, new Deadlines(description, deadline));
+                    }
+                    else if (parts[0].equals("event")) {
+                        if (parts.length < 2) {
+                            throw new IllegalArgumentException("Use the proper syntax: event <description> /from <start> /to <end>");
+                        }
+
+                        String[] eventParts = parts[1].split("/from|/to");
+                        if (eventParts.length < 3) {
+                            throw new IllegalArgumentException("Use the proper syntax: event <description> /from <start> /to <end>");
+                        }
+
+                        String description = eventParts[0].trim();
+                        String eventStart = eventParts[1].trim();
+                        String eventEnd = eventParts[2].trim();
+                        if (description.isEmpty()) {
+                            throw new IllegalArgumentException("Event description cannot be empty");
+                        }
+                        addTask(tasks, index++, new Events(description, eventStart, eventEnd));
+                    }
+                    else if (parts[0].equals("todo")) {
+                        if (parts.length < 2 || parts[1].trim().isEmpty()) {
                             throw new IllegalArgumentException("Description of a todo cannot be empty");
                         }
-                        addTask(tasks, index++, new ToDos(description));
-                    } else {
+                        addTask(tasks, index++, new ToDos(parts[1].trim()));
+                    }
+                    else {
                         throw new IllegalArgumentException("Unknown command, try another command");
                     }
                 } catch (NumberFormatException e) {
@@ -133,15 +124,11 @@ public class billy {
                     System.out.println(e.getMessage());
                 } catch (ArrayIndexOutOfBoundsException e) {
                     System.out.println("Task number is out of range");
-                }
-                finally {
+                } finally {
                     divider();
                 }
-
-
             }
-
-        } while (!lowerLine.equals("bye"));
+        } while (!line.equals("bye"));
 
         divider();
         System.out.println("Bye. Hope to see you again soon!");

@@ -79,6 +79,20 @@ public class billy {
                         System.out.println("Nice! I've marked this task as not done yet:");
                         System.out.print("   ");
                         tasks.get(markIndex - 1).printStatus();
+                    } else if (firstWord.equals("delete")) {
+                        if (spaceIndex == -1) {
+                            throw new IllegalArgumentException("Specify task number to be deleted");
+                        }
+                        markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1).trim());
+                        if (markIndex > index) {
+                            throw new ArrayIndexOutOfBoundsException("");
+                        }
+                        System.out.println("Noted I've removed this task:");
+                        System.out.print("   ");
+                        tasks.get(markIndex - 1).printStatus();
+                        tasks.remove(markIndex - 1);
+                        --index;
+                        System.out.println("Now you have " + (index) + " tasks in the list");
                     } else if (firstWord.equals("deadline")) {
                         int byIndex = lowerLine.indexOf("/by");
                         if (byIndex == -1) {

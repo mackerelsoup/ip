@@ -45,42 +45,85 @@ public class billy {
 
             if (!lowerLine.equals("bye")) {
                 divider();
-                if (lowerLine.equals("list")) {
-                    System.out.println("Here are the tasks in your list");
-                    for (int i = 0; i < index; ++i) {
-                        System.out.printf("%d.", i + 1);
-                        tasks[i].printStatus();
-                    }
-                } else if (firstWord.equals("mark")) {
-                    markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1));
-                    tasks[markIndex - 1].setDone();
-                    System.out.println("Nice! I've marked this task as done:");
-                    System.out.print("   ");
-                    tasks[markIndex - 1].printStatus();
-                } else if (firstWord.equals("unmark")) {
-                    markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1));
-                    tasks[markIndex - 1].setUndone();
-                    System.out.println("Nice! I've marked this task as not done yet:");
-                    System.out.print("   ");
-                    tasks[markIndex - 1].printStatus();
-                } else if (firstWord.equals("deadline")) {
-                    int byIndex = lowerLine.indexOf("/by");
-                    String description = line.substring(spaceIndex + 1, byIndex - 1);
-                    String deadline = line.substring(byIndex + 4);
-                    addTask(tasks, index++, new Deadlines(description, deadline));
-                } else if (firstWord.equals("event")) {
-                    int fromIndex = lowerLine.indexOf("/from");
-                    int toIndex = lowerLine.indexOf("/to");
-                    String description = line.substring(spaceIndex + 1, fromIndex - 1);
-                    String eventStart = line.substring(fromIndex + 6, toIndex - 1);
-                    String eventEnd = line.substring(toIndex + 4);
-                    addTask(tasks, index++, new Events(description, eventStart, eventEnd));
 
-                } else if (firstWord.equals("todo")) {
-                    String description = line.substring(5);
-                    addTask(tasks, index++, new ToDos(description));
+                try {
+                    if (lowerLine.equals("list")) {
+                        System.out.println("Here are the tasks in your list");
+                        for (int i = 0; i < index; ++i) {
+                            System.out.printf("%d.", i + 1);
+                            tasks[i].printStatus();
+                        }
+                    } else if (firstWord.equals("mark")) {
+                        if (spaceIndex == -1) {
+                            throw new IllegalArgumentException("Specify task number");
+                        }
+
+                        markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1).trim());
+                        if (markIndex > index) {
+                            throw new ArrayIndexOutOfBoundsException("");
+                        }
+                        tasks[markIndex - 1].setDone();
+                        System.out.println("Nice! I've marked this task as done:");
+                        System.out.print("   ");
+                        tasks[markIndex - 1].printStatus();
+                    } else if (firstWord.equals("unmark")) {
+                        if (spaceIndex == -1) {
+                            throw new IllegalArgumentException("Specify task number");
+                        }
+                        markIndex = Integer.parseInt(lowerLine.substring(spaceIndex + 1).trim());
+                        if (markIndex > index) {
+                            throw new ArrayIndexOutOfBoundsException("");
+                        }
+                        tasks[markIndex - 1].setUndone();
+                        System.out.println("Nice! I've marked this task as not done yet:");
+                        System.out.print("   ");
+                        tasks[markIndex - 1].printStatus();
+                    } else if (firstWord.equals("deadline")) {
+                        int byIndex = lowerLine.indexOf("/by");
+                        if (byIndex == -1) {
+                            throw new IllegalArgumentException("Use the proper syntax: deadline <description> /by <deadline>");
+                        }
+                        String description = line.substring(spaceIndex + 1, byIndex).trim();
+                        String deadline = line.substring(byIndex + 4).trim();
+                        if (description.isEmpty())
+                            throw new IllegalArgumentException("Deadline description cannot be empty");
+                        addTask(tasks, index++, new Deadlines(description, deadline));
+                    } else if (firstWord.equals("event")) {
+                        int fromIndex = lowerLine.indexOf("/from");
+                        int toIndex = lowerLine.indexOf("/to");
+                        if (fromIndex == -1 || toIndex == -1) {
+                            throw new IllegalArgumentException("Use the proper syntax: event <description> /from <start> /to <end");
+                        }
+                        String description = line.substring(spaceIndex + 1, fromIndex).trim();
+                        String eventStart = line.substring(fromIndex + 6, toIndex).trim();
+                        String eventEnd = line.substring(toIndex + 4);
+                        if (description.isEmpty()) throw new IllegalArgumentException("Event description cannot be empty");
+                        addTask(tasks, index++, new Events(description, eventStart, eventEnd));
+
+                    } else if (firstWord.equals("todo")) {
+                        if (line.length() < 5) {
+                            throw new IllegalArgumentException("Please enter a description");
+                        }
+                        String description = line.substring(5).trim();
+                        if (description.isEmpty()) {
+                            throw new IllegalArgumentException("Description of a todo cannot be empty");
+                        }
+                        addTask(tasks, index++, new ToDos(description));
+                    } else {
+                        throw new IllegalArgumentException("Unknown command, try another command");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Enter a valid index");
+                } catch (IllegalArgumentException e) {
+                    System.out.println(e.getMessage());
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    System.out.println("Task number is out of range");
                 }
-                divider();
+                finally {
+                    divider();
+                }
+
+
             }
 
         } while (!lowerLine.equals("bye"));

@@ -1,7 +1,125 @@
-Hello from
- ____        _        
-|  _ \ _   _| | _____ 
-| | | | | | | |/ / _ \
-| |_| | |_| |   <  __/
-|____/ \__,_|_|\_\___|
+__________________________________________________
+Hello, I'm billy
+What can I do for you?
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [T][ ] read chapter 5
+Now you have 1 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [D][ ] finish homework (by: 2025-08-19)
+Now you have 2 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [E][ ] team sync (from: tue 9am to: tue 10am)
+Now you have 3 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [T][ ] buy groceries
+Now you have 4 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [D][ ] submit project report (by: friday)
+Now you have 5 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [E][ ] client meeting (from: wed 1pm to: wed 2pm)
+Now you have 6 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Here are the tasks in your list
+1.[T][ ] read chapter 5
+2.[D][ ] finish homework (by: 2025-08-19)
+3.[E][ ] team sync (from: tue 9am to: tue 10am)
+4.[T][ ] buy groceries
+5.[D][ ] submit project report (by: friday)
+6.[E][ ] client meeting (from: wed 1pm to: wed 2pm)
+__________________________________________________
+Your input: __________________________________________________
+Nice! I've marked this task as done:
+   [D][X] finish homework (by: 2025-08-19)
+__________________________________________________
+Your input: __________________________________________________
+Nice! I've marked this task as not done yet:
+   [T][ ] read chapter 5
+__________________________________________________
+Your input: __________________________________________________
+Noted I've removed this task:
+Now you have 5 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Description of a todo cannot be empty
+__________________________________________________
+Your input: __________________________________________________
+Deadline description cannot be empty
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [E][ ] team lunch (from:  to: 1pm)
+Now you have 6 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [T][ ] clean room
+Now you have 7 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [D][ ] do exercises (by: )
+Now you have 8 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Use the proper syntax: event <description> /from <start> /to <end>
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [T][ ] borrow book
+Now you have 9 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Here are the tasks in your list
+1.[T][ ] read chapter 5
+2.[D][X] finish homework (by: 2025-08-19)
+3.[T][ ] buy groceries
+4.[D][ ] submit project report (by: friday)
+5.[E][ ] client meeting (from: wed 1pm to: wed 2pm)
+6.[E][ ] team lunch (from:  to: 1pm)
+7.[T][ ] clean room
+8.[D][ ] do exercises (by: )
+9.[T][ ] borrow book
+__________________________________________________
+Your input: __________________________________________________
+Nice! I've marked this task as done:
+   [E][X] client meeting (from: wed 1pm to: wed 2pm)
+__________________________________________________
+Your input: __________________________________________________
+Task number is out of range
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [D][ ] practice piano (by: sat 5pm)
+Now you have 10 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [E][ ] presentation (from: thu 3pm to: thu 4pm)
+Now you have 11 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Got it. I've added this task:
+    [T][ ] water plants
+Now you have 12 tasks in the list
+__________________________________________________
+Your input: __________________________________________________
+Task number is out of range
+__________________________________________________
+Your input: __________________________________________________
+Bye. Hope to see you again soon!
+__________________________________________________
 

@@ -1,6 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
+
+
 public class billy {
 
     public static void divider() {
@@ -40,6 +42,8 @@ public class billy {
 
             if (!lowerLine.equals("bye")) {
                 divider();
+
+
 
                 try {
                     if (lowerLine.equals("list")) {

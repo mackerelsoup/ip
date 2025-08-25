@@ -16,13 +16,17 @@ public class billy {
         System.out.println("Now you have " + (index + 1) + " tasks in the list");
     }
 
-    public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-
+    private static void intro() {
         divider();
         System.out.println("Hello, I'm billy");
         System.out.println("What can I do for you?");
         divider();
+    }
+
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        intro();
 
         String line;
         ArrayList<Task> tasks = new ArrayList<>();

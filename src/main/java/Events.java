@@ -1,5 +1,4 @@
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
 import java.util.Optional;
 
 public class Events extends Task{
@@ -13,19 +12,9 @@ public class Events extends Task{
         this.eventStart = eventStart;
         this.eventEnd = eventEnd;
 
-        this.eventStartTime = tryParse(eventStart, false);
-        this.eventEndTime   = tryParse(eventEnd, true);
+        this.eventStartTime = Parser.tryParse(eventStart, false);
+        this.eventEndTime   = Parser.tryParse(eventEnd, true);
     }
-
-    private Optional<LocalDateTime> tryParse(String input, boolean isEnd) {
-        try {
-            return Optional.of(Parser.parseDateTime(input, isEnd));
-        } catch (DateTimeParseException e) {
-            return Optional.empty();
-        }
-    }
-
-
 
     @Override
     public void printStatus() {
@@ -37,7 +26,7 @@ public class Events extends Task{
 
     @Override
     public String getFileString() {
-        return String.format("E | %s | %s | %s\n", this.description,
+        return String.format("event | %d | %s | %s | %s\n", this.isDone? 1 : 0, this.description,
                 this.eventStartTime.map(Parser::getTime).orElseGet(() -> this.eventStart),
                 this.eventEndTime.map(Parser::getTime).orElseGet(() -> this.eventEnd));
     }

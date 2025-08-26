@@ -27,4 +27,8 @@ public class Task {
     public void printStatus() {
         System.out.printf("[%s] %s\n", getStatusIcon(), this.description);
     }
+
+    public String getFileString(){
+        return String.format("T | %s", this.description);
+    }
 }

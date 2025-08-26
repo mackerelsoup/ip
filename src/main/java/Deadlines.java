@@ -5,8 +5,8 @@ public class Deadlines extends Task{
     protected String deadline;
     protected Optional<LocalDateTime> deadlineTime;
 
-    public Deadlines(String description, String deadline) {
-        super(description);
+    public Deadlines(String description, boolean done, String deadline) {
+        super(description, done);
         this.deadline = deadline;
         this.deadlineTime = Parser.tryParse(deadline, true);
     }
@@ -20,7 +20,7 @@ public class Deadlines extends Task{
 
     @Override
     public String getFileString() {
-        return String.format("D | %s | %s", this.description,
+        return String.format("deadline | %d | %s | %s", this.isDone? 1 : 0, this.description,
                 this.deadlineTime.map(Parser::getTime).orElseGet(() -> this.deadline));
     }
 

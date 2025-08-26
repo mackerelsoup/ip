@@ -9,17 +9,21 @@ import java.time.format.DateTimeParseException;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Optional;
 
 
 
 public class Parser {
 
-    private static String getTime(String time, boolean endOfDay) {
+    public static String getTime(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
+    }
+
+    public static Optional<LocalDateTime> tryParse(String input, boolean isEnd) {
         try {
-            LocalDateTime dateTime = parseDateTime(time, endOfDay);
-            return dateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
-        } catch (DateTimeParseException exception) {
-            return time;
+            return Optional.of(Parser.parseDateTime(input, isEnd));
+        } catch (DateTimeParseException e) {
+            return Optional.empty();
         }
     }
 

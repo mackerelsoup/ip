@@ -2,8 +2,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.temporal.Temporal;
+import java.time.format.FormatStyle;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
@@ -98,14 +100,14 @@ public class billy {
                 if (parts.length < 4) {
                     throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
                 }
-                tasks.add(new Deadlines(parts[2], done, parts[3]));
+                tasks.add(new Deadlines(parts[2], done, getTime(parts[3], true)));
                 break;
             }
             case EVENT: {
                 if (parts.length < 5) {
                     throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
                 }
-                tasks.add(new Events(parts[2], done, parts[3], parts[4]));
+                tasks.add(new Events(parts[2], done, getTime(parts[3], false), getTime(parts[4], true)));
                 break;
             }
             case TODO: {
@@ -125,17 +127,26 @@ public class billy {
     }
 
     //this will return the string either as just the date or time
-    public static LocalDateTime parseDateTime(String time) throws DateTimeParseException {
+    public static LocalDateTime parseDateTime(String time, boolean endOfDay) throws DateTimeParseException {
         try {
             return LocalDateTime.parse(time);
         } catch (DateTimeParseException exception) {
             try {
                 LocalDate date = LocalDate.parse(time);
-                return date.atStartOfDay();
+                return endOfDay? date.atTime(LocalTime.MAX) : date.atStartOfDay();
             } catch (DateTimeParseException exception2) {
                 throw new DateTimeParseException("Not a valid date or date time",
                         exception2.getParsedString(), exception2.getErrorIndex());
             }
+        }
+    }
+
+    public static String getTime(String time, boolean endOfDay) {
+        try {
+            LocalDateTime dateTime = parseDateTime(time, endOfDay);
+            return dateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
+        } catch (DateTimeParseException exception) {
+            return time;
         }
     }
 
@@ -231,7 +242,7 @@ public class billy {
                             }
 
                             String description = deadlineParts[0].trim();
-                            String deadline = deadlineParts[1].trim();
+                            String deadline = getTime(deadlineParts[1].trim(), true);
                             if (description.isEmpty()) {
                                 throw new IllegalArgumentException("Deadline description cannot be empty");
                             }
@@ -249,8 +260,8 @@ public class billy {
                             }
 
                             String description = eventParts[0].trim();
-                            String eventStart = eventParts[1].trim();
-                            String eventEnd = eventParts[2].trim();
+                            String eventStart = getTime(eventParts[1].trim(), false);
+                            String eventEnd = getTime(eventParts[2].trim(), true);
                             if (description.isEmpty()) {
                                 throw new IllegalArgumentException("Event description cannot be empty");
                             }

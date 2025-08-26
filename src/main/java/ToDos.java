@@ -12,6 +12,6 @@ public class ToDos extends Task{
 
     @Override
     public String getFileString() {
-        return String.format("todo | %d | %s", isDone? 1 : 0, this.description);
+        return String.format("todo | %d | %s\n", isDone? 1 : 0, this.description);
     }
 }

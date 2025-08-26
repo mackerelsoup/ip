@@ -1,6 +1,8 @@
+import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.Scanner;
 import java.util.ArrayList;
-
+import java.io.File;
 
 
 public class billy {
@@ -42,6 +44,58 @@ public class billy {
 
     }
 
+    public static void parseFile(File file, ArrayList<Task> tasks) throws FileNotFoundException, IllegalArgumentException  {
+        if (!file.exists()) {
+            throw new FileNotFoundException("File is not found, create a intial file at ./data/initialList.txt");
+        }
+
+        Scanner scanner = new Scanner(file);
+        int lineCount = 0;
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
+            String[] parts = line.split("\\|");
+            for (int i = 0; i < parts.length; i++) {
+                parts[i] = parts[i].trim();
+            }
+
+            Commands command = parseCommand(parts[0]);
+            if (parts.length < 3) {
+                throw new IllegalArgumentException("Line " + lineCount + " invalid command format");
+            }
+
+            boolean done = Integer.parseInt(parts[1]) != 0 ;
+
+            switch (command) {
+            case DEADLINE: {
+                if (parts.length < 4) {
+                    throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
+                }
+                tasks.add(new Deadlines(parts[2], done, parts[3]));
+                break;
+            }
+            case EVENT: {
+                if (parts.length < 5) {
+                    throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
+                }
+                tasks.add(new Events(parts[2], done, parts[3], parts[4]));
+                break;
+            }
+            case TODO: {
+                tasks.add(new ToDos(parts[2], done));
+                break;
+            }
+            default: {
+                throw new IllegalArgumentException("File contains invalid commands");
+            }
+            }
+            lineCount++;
+        }
+        System.out.println("List loaded: ");
+        for (Task task : tasks) {
+            task.printStatus();
+        }
+    }
+
     private static void intro() {
         divider();
         System.out.println("Hello, I'm billy");
@@ -53,13 +107,21 @@ public class billy {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
+        File file = new File("./data/initialList.txt");
+        ArrayList<Task> tasks = new ArrayList<>();
+
+        try {
+            parseFile(file, tasks);
+        } catch (FileNotFoundException exception) {
+            System.out.println(exception.getMessage());
+            return;
+        } catch (IllegalArgumentException exception) {
+            System.out.println(exception.getMessage());
+        }
 
         intro();
 
         String line;
-        ArrayList<Task> tasks = new ArrayList<>();
-        int index = 0;
-
         while (true) {
             System.out.print("Your input: ");
             line = input.nextLine();
@@ -106,7 +168,7 @@ public class billy {
                             System.out.print("   ");
                             tasks.get(taskIndex - 1).printStatus();
                             tasks.remove(taskIndex - 1);
-                            System.out.println("Now you have " + index + " tasks in the list");
+                            System.out.println("Now you have " + tasks.size() + " tasks in the list");
                             break;
                         }
 

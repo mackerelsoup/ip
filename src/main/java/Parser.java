@@ -16,7 +16,11 @@ import java.util.Optional;
 public class Parser {
 
     public static String getTime(LocalDateTime dateTime) {
-        return dateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
+        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    }
+
+    public static String getIsoTime(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
     public static Optional<LocalDateTime> tryParse(String input, boolean isEnd) {

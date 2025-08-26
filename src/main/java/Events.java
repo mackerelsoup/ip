@@ -27,7 +27,7 @@ public class Events extends Task{
     @Override
     public String getFileString() {
         return String.format("event | %d | %s | %s | %s\n", this.isDone? 1 : 0, this.description,
-                this.eventStartTime.map(Parser::getTime).orElseGet(() -> this.eventStart),
-                this.eventEndTime.map(Parser::getTime).orElseGet(() -> this.eventEnd));
+                this.eventStartTime.map(Parser::getIsoTime).orElseGet(() -> this.eventStart),
+                this.eventEndTime.map(Parser::getIsoTime).orElseGet(() -> this.eventEnd));
     }
 }

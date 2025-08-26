@@ -20,8 +20,8 @@ public class Deadlines extends Task{
 
     @Override
     public String getFileString() {
-        return String.format("deadline | %d | %s | %s", this.isDone? 1 : 0, this.description,
-                this.deadlineTime.map(Parser::getTime).orElseGet(() -> this.deadline));
+        return String.format("deadline | %d | %s | %s\n", this.isDone? 1 : 0, this.description,
+                this.deadlineTime.map(Parser::getIsoTime).orElseGet(() -> this.deadline));
     }
 
 }

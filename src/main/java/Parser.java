@@ -115,14 +115,14 @@ public class Parser {
                 if (parts.length < 4) {
                     throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
                 }
-                tasks.add(new Deadlines(parts[2], done, getTime(parts[3], true)));
+                tasks.add(new Deadlines(parts[2], done, parts[3]));
                 break;
             }
             case EVENT: {
                 if (parts.length < 5) {
                     throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
                 }
-                tasks.add(new Events(parts[2], done, getTime(parts[3], false), getTime(parts[4], true)));
+                tasks.add(new Events(parts[2], done, parts[3], parts[4]));
                 break;
             }
             case TODO: {

@@ -1,6 +1,9 @@
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.Temporal;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
@@ -118,6 +121,21 @@ public class billy {
         System.out.println("List loaded: ");
         for (Task task : tasks) {
             task.printStatus();
+        }
+    }
+
+    //this will return the string either as just the date or time
+    public static LocalDateTime parseDateTime(String time) throws DateTimeParseException {
+        try {
+            return LocalDateTime.parse(time);
+        } catch (DateTimeParseException exception) {
+            try {
+                LocalDate date = LocalDate.parse(time);
+                return date.atStartOfDay();
+            } catch (DateTimeParseException exception2) {
+                throw new DateTimeParseException("Not a valid date or date time",
+                        exception2.getParsedString(), exception2.getErrorIndex());
+            }
         }
     }
 

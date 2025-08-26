@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -44,10 +45,34 @@ public class billy {
 
     }
 
-    public static void parseFile(File file, ArrayList<Task> tasks) throws FileNotFoundException, IllegalArgumentException  {
-        if (!file.exists()) {
-            throw new FileNotFoundException("File is not found, create a intial file at ./data/initialList.txt");
+    public static void ensureFileExists(File file) {
+        File parentDir = file.getParentFile();
+
+        if (!parentDir.exists()) {
+            System.out.println("Parent directory does not exists, creating directory");
+            boolean created = parentDir.mkdirs();
+            if (!created) {
+                throw new RuntimeException("Couldn't create parent directory " + parentDir);
+            }
+            System.out.println("Parent directory created at: " + parentDir.getAbsoluteFile());
         }
+
+        if (!file.exists()) {
+            System.out.println("Input file does not exist, attempting to create file");
+            try {
+                boolean created = file.createNewFile();
+                if (!created) {
+                    throw new IOException("Could not create file " + file.getAbsolutePath());
+                }
+                System.out.println("Created file at: " + file.getAbsolutePath());
+            } catch (IOException exception) {
+                System.out.println(exception.getMessage());
+            }
+        }
+    }
+
+    public static void parseFile(File file, ArrayList<Task> tasks) throws FileNotFoundException, IllegalArgumentException  {
+        ensureFileExists(file);
 
         Scanner scanner = new Scanner(file);
         int lineCount = 0;
@@ -112,10 +137,10 @@ public class billy {
 
         try {
             parseFile(file, tasks);
-        } catch (FileNotFoundException exception) {
+        } catch (IllegalArgumentException exception) {
             System.out.println(exception.getMessage());
             return;
-        } catch (IllegalArgumentException exception) {
+        } catch (FileNotFoundException exception) {
             System.out.println(exception.getMessage());
         }
 

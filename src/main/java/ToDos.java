@@ -3,6 +3,8 @@ public class ToDos extends Task{
         super(description);
     }
 
+    public ToDos(String description, boolean done) {super(description, done); }
+
     @Override
     public void printStatus() {
         System.out.printf("[T][%s] %s\n", getStatusIcon(), this.description);

@@ -50,7 +50,7 @@ public class billy {
 
     }
 
-    public static void ensureFileExists(File file) {
+    public static void loadFile(File file) {
         File parentDir = file.getParentFile();
 
         if (!parentDir.exists()) {
@@ -77,7 +77,7 @@ public class billy {
     }
 
     public static void parseFile(File file, ArrayList<Task> tasks) throws FileNotFoundException, IllegalArgumentException  {
-        ensureFileExists(file);
+        loadFile(file);
 
         Scanner scanner = new Scanner(file);
         int lineCount = 0;
@@ -100,14 +100,14 @@ public class billy {
                 if (parts.length < 4) {
                     throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
                 }
-                tasks.add(new Deadlines(parts[2], done, getTime(parts[3], true)));
+                tasks.add(new Deadlines(parts[2], done, parts[3]));
                 break;
             }
             case EVENT: {
                 if (parts.length < 5) {
                     throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
                 }
-                tasks.add(new Events(parts[2], done, getTime(parts[3], false), getTime(parts[4], true)));
+                tasks.add(new Events(parts[2], done, parts[3], parts[4]));
                 break;
             }
             case TODO: {
@@ -126,6 +126,7 @@ public class billy {
         }
     }
 
+
     //this will return the string either as just the date or time
     public static LocalDateTime parseDateTime(String time, boolean endOfDay) throws DateTimeParseException {
         try {
@@ -141,13 +142,8 @@ public class billy {
         }
     }
 
-    public static String getTime(String time, boolean endOfDay) {
-        try {
-            LocalDateTime dateTime = parseDateTime(time, endOfDay);
-            return dateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
-        } catch (DateTimeParseException exception) {
-            return time;
-        }
+    public static String getTime(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
     }
 
     private static void intro() {
@@ -156,7 +152,6 @@ public class billy {
         System.out.println("What can I do for you?");
         divider();
     }
-
 
 
     public static void main(String[] args) {
@@ -242,11 +237,11 @@ public class billy {
                             }
 
                             String description = deadlineParts[0].trim();
-                            String deadline = getTime(deadlineParts[1].trim(), true);
+                            String deadline = deadlineParts[1].trim();
                             if (description.isEmpty()) {
                                 throw new IllegalArgumentException("Deadline description cannot be empty");
                             }
-                            addTask(tasks, new Deadlines(description, deadline));
+                            addTask(tasks, new Deadlines(description, false, deadline));
                             break;
                         }
                         case EVENT: {
@@ -260,12 +255,12 @@ public class billy {
                             }
 
                             String description = eventParts[0].trim();
-                            String eventStart = getTime(eventParts[1].trim(), false);
-                            String eventEnd = getTime(eventParts[2].trim(), true);
+                            String eventStart = eventParts[1].trim();
+                            String eventEnd = eventParts[2].trim();
                             if (description.isEmpty()) {
                                 throw new IllegalArgumentException("Event description cannot be empty");
                             }
-                            addTask(tasks, new Events(description, eventStart, eventEnd));
+                            addTask(tasks, new Events(description, false, eventStart, eventEnd));
                             break;
                         }
                         case TODO: {

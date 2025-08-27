@@ -10,13 +10,6 @@ public class billy {
         System.out.println(divider);
     }
 
-    public static void addTask(ArrayList<Task> tasks, Task newTask) {
-        tasks.add(newTask);
-        System.out.println("Got it. I've added this task:");
-        System.out.print("    ");
-        tasks.getLast().printStatus();
-        System.out.println("Now you have " + tasks.size() + " tasks in the list");
-    }
 
 
     private static void intro() {
@@ -112,7 +105,7 @@ public class billy {
                             if (description.isEmpty()) {
                                 throw new IllegalArgumentException("Deadline description cannot be empty");
                             }
-                            addTask(tasks, new Deadlines(description, false, deadline));
+                            taskList.addTask(new Deadlines(description, false, deadline));
                             break;
                         }
                         case EVENT: {
@@ -131,14 +124,14 @@ public class billy {
                             if (description.isEmpty()) {
                                 throw new IllegalArgumentException("Event description cannot be empty");
                             }
-                            addTask(tasks, new Events(description, false, eventStart, eventEnd));
+                            taskList.addTask(new Events(description, false, eventStart, eventEnd));
                             break;
                         }
                         case TODO: {
                             if (parts.length < 2 || parts[1].trim().isEmpty()) {
                                 throw new IllegalArgumentException("Description of a todo cannot be empty");
                             }
-                            addTask(tasks, new ToDos(parts[1].trim()));
+                            taskList.addTask(new ToDos(parts[1].trim()));
                             break;
                         }
                         case UNKNOWN: {

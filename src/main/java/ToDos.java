@@ -9,4 +9,9 @@ public class ToDos extends Task{
     public void printStatus() {
         System.out.printf("[T][%s] %s\n", getStatusIcon(), this.description);
     }
+
+    @Override
+    public String getFileString() {
+        return String.format("todo | %d | %s\n", isDone? 1 : 0, this.description);
+    }
 }

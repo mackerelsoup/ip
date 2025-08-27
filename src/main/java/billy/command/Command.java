@@ -126,7 +126,12 @@ public class Command {
     }
 
     public Commands getCommand() {
+
         return this.command;
+    }
+
+    public String getRemainingCommand() {
+        return this.remainingCommand;
     }
 
     public boolean isExit() {

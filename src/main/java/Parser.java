@@ -107,7 +107,6 @@ public class Parser {
                 throw new IllegalArgumentException("File contains invalid commands");
             }
             }
-            lineCount++;
         }
 
         System.out.println("List loaded: ");

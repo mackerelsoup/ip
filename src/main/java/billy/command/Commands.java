@@ -1,3 +1,5 @@
+package billy.command;
+
 public enum Commands {
     LIST,
     MARK,

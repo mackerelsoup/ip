@@ -1,5 +1,5 @@
 __________________________________________________
-Hello, I'm billy
+Hello, I'm billy.billy
 What can I do for you?
 __________________________________________________
 Your input: __________________________________________________
@@ -99,7 +99,7 @@ Nice! I've marked this task as done:
    [E][X] client meeting (from: wed 1pm to: wed 2pm)
 __________________________________________________
 Your input: __________________________________________________
-Task number is out of range
+billy.task.Task number is out of range
 __________________________________________________
 Your input: __________________________________________________
 Got it. I've added this task:
@@ -117,7 +117,7 @@ Got it. I've added this task:
 Now you have 12 tasks in the list
 __________________________________________________
 Your input: __________________________________________________
-Task number is out of range
+billy.task.Task number is out of range
 __________________________________________________
 Your input: __________________________________________________
 Bye. Hope to see you again soon!

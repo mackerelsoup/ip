@@ -57,7 +57,7 @@ public class Command {
                     ui.removeTask(taskList, removed);
                     break;
                 }
-
+                break;
             }
             case DEADLINE: {
                 if (remainingCommand.trim().isEmpty()) {
@@ -108,6 +108,7 @@ public class Command {
             }
             case BYE: {
                 this.exit = true;
+                break;
             }
             case UNKNOWN: {
                 throw new IllegalArgumentException("Unknown command, try another command");

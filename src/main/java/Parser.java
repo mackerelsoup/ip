@@ -69,8 +69,8 @@ public class Parser {
 
     }
 
-    public static void parseLines(ArrayList<String> lines, ArrayList<Task> tasks) throws IllegalArgumentException  {
-
+    public static ArrayList<Task> parseLines(ArrayList<String> lines) throws IllegalArgumentException  {
+        ArrayList<Task> tasks = new ArrayList<>();
         for (int lineCount = 0; lineCount < lines.size(); lineCount++) {
             String[] parts = lines.get(lineCount).split("\\|");
             for (int i = 0; i < parts.length; i++) {
@@ -113,6 +113,8 @@ public class Parser {
         for (Task task : tasks) {
             task.printStatus();
         }
+
+        return tasks;
     }
 
 }

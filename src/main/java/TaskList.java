@@ -37,7 +37,7 @@ public class TaskList {
             throw new ArrayIndexOutOfBoundsException();
     }
 
-    public void unmarkTast(int index) {
+    public void unmarkTask(int index) {
         if (index >= 0 && index < this.tasks.size()) {
             this.tasks.get(index).setUndone();
         } else
@@ -52,6 +52,7 @@ public class TaskList {
     }
 
     public void printList() {
+        System.out.println("Here are the tasks in your list");
         for (Task task : this.tasks) {
             task.printStatus();
         }

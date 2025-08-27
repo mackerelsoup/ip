@@ -55,11 +55,11 @@ public class Storage {
         return lines;
     }
 
-    public void writeFile(ArrayList<Task> tasks) {
+    public void writeFile(TaskList tasks) {
         try {
             FileWriter fileWriter = new FileWriter(this.file.getPath());
-            for (Task task : tasks) {
-                fileWriter.write(task.getFileString());
+            for (int i = 0; i < tasks.getSize(); ++i) {
+                fileWriter.write(tasks.getTask(i).getFileString());
             }
 
             fileWriter.close();

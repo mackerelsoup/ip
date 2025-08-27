@@ -61,6 +61,7 @@ public class Ui {
     }
 
     public String getUserInput() {
+        divider();
         System.out.print("Your input: ");
         return input.nextLine();
     }

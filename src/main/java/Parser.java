@@ -1,14 +1,10 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.Optional;
 
 
@@ -45,6 +41,32 @@ public class Parser {
         }
     }
 
+    public static Command parseFullCommand(String command) {
+        String[] parts = command.split("\\s+", 2);
+        String arguments = parts.length > 1 ? parts[1] : "";
+
+        switch (parts[0].toLowerCase()) {
+        case "list":
+            return new Command(Commands.LIST);
+        case "mark":
+            return new Command(Commands.MARK, arguments);
+        case "unmark":
+            return new Command(Commands.UNMARK, arguments);
+        case "delete":
+            return new Command(Commands.DELETE, arguments);
+        case "deadline":
+            return new Command(Commands.DEADLINE, arguments);
+        case "event":
+            return new Command(Commands.EVENT, arguments);
+        case "todo":
+            return new Command(Commands.TODO, arguments);
+        case "bye":
+            return new Command(Commands.BYE);
+        default:
+            return new Command(Commands.UNKNOWN);
+        }
+    }
+
     public static Commands parseCommand(String command) {
         switch (command) {
         case "list":
@@ -66,7 +88,6 @@ public class Parser {
         default:
             return Commands.UNKNOWN;
         }
-
     }
 
     public static ArrayList<Task> parseLines(ArrayList<String> lines) throws IllegalArgumentException  {

@@ -69,40 +69,10 @@ public class Parser {
 
     }
 
-    public static void ensureFileExists(File file) {
-        File parentDir = file.getParentFile();
+    public static void parseLines(ArrayList<String> lines, ArrayList<Task> tasks) throws IllegalArgumentException  {
 
-        if (!parentDir.exists()) {
-            System.out.println("Parent directory does not exists, creating directory");
-            boolean created = parentDir.mkdirs();
-            if (!created) {
-                throw new RuntimeException("Couldn't create parent directory " + parentDir);
-            }
-            System.out.println("Parent directory created at: " + parentDir.getAbsoluteFile());
-        }
-
-        if (!file.exists()) {
-            System.out.println("Input file does not exist, attempting to create file");
-            try {
-                boolean created = file.createNewFile();
-                if (!created) {
-                    throw new IOException("Could not create file " + file.getAbsolutePath());
-                }
-                System.out.println("Created file at: " + file.getAbsolutePath());
-            } catch (IOException exception) {
-                System.out.println(exception.getMessage());
-            }
-        }
-    }
-
-    public static void parseFile(File file, ArrayList<Task> tasks) throws FileNotFoundException, IllegalArgumentException  {
-        ensureFileExists(file);
-
-        Scanner scanner = new Scanner(file);
-        int lineCount = 0;
-        while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
-            String[] parts = line.split("\\|");
+        for (int lineCount = 0; lineCount < lines.size(); lineCount++) {
+            String[] parts = lines.get(lineCount).split("\\|");
             for (int i = 0; i < parts.length; i++) {
                 parts[i] = parts[i].trim();
             }
@@ -139,9 +109,11 @@ public class Parser {
             }
             lineCount++;
         }
+
         System.out.println("List loaded: ");
         for (Task task : tasks) {
             task.printStatus();
         }
     }
+
 }

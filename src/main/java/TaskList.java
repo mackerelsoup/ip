@@ -25,6 +25,10 @@ public class TaskList {
             throw new ArrayIndexOutOfBoundsException();
     }
 
+    public Task getLatestTask() {
+        return this.tasks.getLast();
+    }
+
     public void markTask(int index) {
         if (index >= 0 && index < this.tasks.size()) {
             this.tasks.get(index).setDone();
@@ -47,12 +51,14 @@ public class TaskList {
             throw new ArrayIndexOutOfBoundsException();
     }
 
-
     public void printList() {
         for (Task task : this.tasks) {
             task.printStatus();
         }
     }
 
+    public int getSize() {
+        return this.tasks.size();
+    }
 
 }

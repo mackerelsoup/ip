@@ -11,26 +11,42 @@ public class TaskList {
         return this.tasks.add(task);
     }
 
-    public void removeTask(int index) {
+    public Task removeTask(int index) {
         if (index >= 0 && index < this.tasks.size()) {
-            this.tasks.remove(index);
-        }
-        throw new ArrayIndexOutOfBoundsException();
+            return this.tasks.remove(index);
+        } else
+            throw new ArrayIndexOutOfBoundsException();
+    }
+
+    public Task getTask(int index) {
+        if (index >= 0 && index < this.tasks.size()) {
+            return this.tasks.get(index);
+        } else
+            throw new ArrayIndexOutOfBoundsException();
     }
 
     public void markTask(int index) {
         if (index >= 0 && index < this.tasks.size()) {
             this.tasks.get(index).setDone();
-        }
-        throw new ArrayIndexOutOfBoundsException();
+
+        } else
+            throw new ArrayIndexOutOfBoundsException();
     }
 
     public void unmarkTast(int index) {
         if (index >= 0 && index < this.tasks.size()) {
             this.tasks.get(index).setUndone();
-        }
-        throw new ArrayIndexOutOfBoundsException();
+        } else
+            throw new ArrayIndexOutOfBoundsException();
     }
+
+    public void printTask(int index) {
+        if (index >= 0 && index < this.tasks.size()) {
+            this.tasks.get(index).printStatus();
+        } else
+            throw new ArrayIndexOutOfBoundsException();
+    }
+
 
     public void printList() {
         for (Task task : this.tasks) {

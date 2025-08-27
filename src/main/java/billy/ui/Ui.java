@@ -1,4 +1,8 @@
-import java.util.ArrayList;
+package billy.ui;
+
+import billy.task.Task;
+import billy.task.TaskList;
+
 import java.util.Scanner;
 
 public class Ui {
@@ -49,7 +53,7 @@ public class Ui {
 
     public void intro() {
         divider();
-        System.out.println("Hello, I'm billy");
+        System.out.println("Hello, I'm billy.billy");
         System.out.println("What can I do for you?");
         divider();
     }
@@ -75,7 +79,7 @@ public class Ui {
     }
 
     public void showOutOfRangeMessage() {
-        System.out.println("Task number is out of range");
+        System.out.println("billy.task.Task number is out of range");
     }
 
     public void showUnknwonErrorMessage() {

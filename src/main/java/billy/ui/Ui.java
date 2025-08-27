@@ -1,9 +1,11 @@
 package billy.ui;
 
+import java.util.Scanner;
+
 import billy.task.Task;
 import billy.task.TaskList;
 
-import java.util.Scanner;
+
 
 public class Ui {
     private Scanner input;

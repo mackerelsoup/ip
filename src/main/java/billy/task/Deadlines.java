@@ -1,9 +1,9 @@
 package billy.task;
 
-import billy.parser.Parser;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import billy.parser.Parser;
 
 public class Deadlines extends Task{
     protected String deadline;

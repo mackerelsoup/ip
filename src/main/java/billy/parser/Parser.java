@@ -61,6 +61,8 @@ public class Parser {
             return new Command(Commands.MARK, arguments);
         case "unmark":
             return new Command(Commands.UNMARK, arguments);
+        case "find":
+            return new Command(Commands.FIND, arguments);
         case "delete":
             return new Command(Commands.DELETE, arguments);
         case "deadline":
@@ -84,6 +86,8 @@ public class Parser {
             return Commands.MARK;
         case "unmark":
             return Commands.UNMARK;
+        case "find":
+            return Commands.FIND;
         case "delete":
             return Commands.DELETE;
         case "deadline":

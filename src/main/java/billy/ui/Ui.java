@@ -3,6 +3,7 @@ package billy.ui;
 import billy.task.Task;
 import billy.task.TaskList;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ui {
@@ -23,6 +24,14 @@ public class Ui {
 
     public void printTaskList(TaskList taskList) {
         taskList.printList();
+    }
+
+    public void printMatchingTasks(ArrayList<Task> matchingTasks) {
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            System.out.print(i + ".");
+            matchingTasks.get(i).printStatus();
+        }
     }
 
     public void addTask(TaskList taskList) {

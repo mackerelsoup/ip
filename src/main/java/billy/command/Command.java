@@ -1,5 +1,7 @@
 package billy.command;
 
+import java.util.ArrayList;
+
 import billy.task.TaskList;
 import billy.task.Deadlines;
 import billy.task.Events;
@@ -57,6 +59,24 @@ public class Command {
                     ui.removeTask(taskList, removed);
                     break;
                 }
+                break;
+            }
+            case FIND: {
+                if (remainingCommand.trim().isEmpty()) {
+                    throw new IllegalArgumentException("Use the proper syntax: find <task>");
+                }
+
+                String task = remainingCommand.trim();
+
+                ArrayList<Task> matching = new ArrayList<>();
+                for (int i = 0; i < taskList.getSize(); i++) {
+                    Task current = taskList.getTask(i);
+                    if (current.getDescription().contains(task)) {
+                        matching.add(current);
+                    }
+                }
+
+                ui.printMatchingTasks(matching);
                 break;
             }
             case DEADLINE: {

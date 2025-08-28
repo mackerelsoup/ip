@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import billy.task.TaskList;
+
 /**
  * Handles reading from and writing to a file for persistent task storage.
  * <p>

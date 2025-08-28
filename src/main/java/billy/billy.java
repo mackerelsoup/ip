@@ -1,5 +1,7 @@
 package billy;
 
+import java.util.ArrayList;
+
 import billy.command.Command;
 import billy.task.TaskList;
 import billy.task.Task;
@@ -7,7 +9,7 @@ import billy.ui.Ui;
 import billy.storage.Storage;
 import billy.parser.Parser;
 
-import java.util.ArrayList;
+
 
 public class billy {
 

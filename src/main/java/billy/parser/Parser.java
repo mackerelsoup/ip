@@ -16,18 +16,43 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 
-
+/**
+ * Utility class for parsing user input commands and task data.
+ * <p>
+ * Provides methods to parse commands into {@link Command} objects, convert date and time strings
+ * into {@link LocalDateTime} objects, and parse saved task lines from storage into {@link Task} objects.
+ * </p>
+ */
 public class Parser {
 
+    /**
+     * Formats a {@link LocalDateTime} to the pattern "yyyy-MM-dd HH:mm:ss".
+     *
+     * @param dateTime the LocalDateTime object
+     * @return formatted date-time string
+     */
     public static String getTime(LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
+    /**
+     * Formats a {@link LocalDateTime} to ISO date-time string.
+     *
+     * @param dateTime the LocalDateTime object
+     * @return ISO formatted date-time string
+     */
     public static String getIsoTime(LocalDateTime dateTime) {
 
         return dateTime.format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
+    /**
+     * Tries to parse a string into a {@link LocalDateTime}.
+     *
+     * @param input the string input to parse
+     * @param isEnd whether to parse as end-of-day if only a date is provided
+     * @return Optional containing the parsed LocalDateTime if successful, or empty if parsing fails
+     */
     public static Optional<LocalDateTime> tryParse(String input, boolean isEnd) {
         try {
             return Optional.of(Parser.parseDateTime(input, isEnd));
@@ -36,6 +61,17 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses a string into a {@link LocalDateTime}.
+     * <p>
+     * If the string contains only a date, converts it to start or end of the day based on {@code endOfDay}.
+     * </p>
+     *
+     * @param time     the string to parse
+     * @param endOfDay whether to use end-of-day for date-only input
+     * @return parsed LocalDateTime
+     * @throws DateTimeParseException if parsing fails
+     */
     public static LocalDateTime parseDateTime(String time, boolean endOfDay) throws DateTimeParseException {
         try {
             return LocalDateTime.parse(time);
@@ -50,6 +86,13 @@ public class Parser {
         }
     }
 
+
+    /**
+     * Parses a full user command string into a {@link Command} object.
+     *
+     * @param command the full user command string
+     * @return Command object corresponding to the input
+     */
     public static Command parseFullCommand(String command) {
         String[] parts = command.split("\\s+", 2);
         String arguments = parts.length > 1 ? parts[1] : "";
@@ -76,6 +119,12 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses a single command string into a {@link Commands} enum.
+     *
+     * @param command the command string
+     * @return Commands enum corresponding to the input
+     */
     public static Commands parseCommand(String command) {
         switch (command) {
         case "list":
@@ -99,6 +148,17 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses a list of saved task lines from storage into {@link Task} objects.
+     * <p>
+     * Each line is expected to have the format: {@code type|done|description|[additional info]}
+     * where {@code type} is one of todo, deadline, or event.
+     * </p>
+     *
+     * @param lines the lines to parse
+     * @return ArrayList of tasks
+     * @throws IllegalArgumentException if a line is malformed or contains invalid commands
+     */
     public static ArrayList<Task> parseLines(ArrayList<String> lines) throws IllegalArgumentException  {
         ArrayList<Task> tasks = new ArrayList<>();
         for (int lineCount = 0; lineCount < lines.size(); lineCount++) {

@@ -9,14 +9,35 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
+/**
+ * Handles reading from and writing to a file for persistent task storage.
+ * <p>
+ * The Storage class ensures that the file and its parent directories exist before reading or writing.
+ * It provides methods to read the file into a list of strings and to write tasks to the file.
+ * </p>
+ */
 public class Storage {
     private final File file;
 
+    /**
+     * Constructs a Storage object for a given file path.
+     *
+     * @param filePath the path to the file used for storing tasks
+     */
     public Storage(String filePath) {
         this.file = new File(filePath);
     }
 
+    /**
+     * Ensures that the specified file and its parent directories exist.
+     * <p>
+     * If the parent directories do not exist, they will be created.
+     * If the file does not exist, it will be created.
+     * </p>
+     *
+     * @param file the file to check or create
+     * @throws RuntimeException if directories or file cannot be created
+     */
     public static void ensureFileExists(File file) {
         File parentDir = file.getParentFile();
 
@@ -44,6 +65,16 @@ public class Storage {
         }
     }
 
+    /**
+     * Reads the contents of the storage file into a list of strings.
+     * <p>
+     * Each line in the file corresponds to an element in the returned ArrayList.
+     * Ensures the file exists before reading.
+     * </p>
+     *
+     * @return an ArrayList of strings representing the lines in the file
+     * @throws RuntimeException if the file cannot be found after ensuring existence
+     */
     public ArrayList<String> readFile() {
         ensureFileExists(this.file);
         ArrayList<String> lines = new ArrayList<>();
@@ -60,6 +91,15 @@ public class Storage {
         return lines;
     }
 
+    /**
+     * Writes the contents of a {@link TaskList} to the storage file.
+     * <p>
+     * Each task is written using its {@code getFileString()} representation.
+     * Existing content in the file will be overwritten.
+     * </p>
+     *
+     * @param tasks the TaskList to write to the file
+     */
     public void writeFile(TaskList tasks) {
         try {
             FileWriter fileWriter = new FileWriter(this.file.getPath());

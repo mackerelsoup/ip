@@ -7,23 +7,59 @@ import billy.task.ToDos;
 import billy.task.Task;
 import billy.ui.Ui;
 
+
+/**
+ * Represents a command issued by the user.
+ * A Command can be one of the predefined types in {@link Commands} such as LIST, MARK, UNMARK, DELETE, DEADLINE,
+ * EVENT, TODO, or BYE. It stores any remaining part of the user input (e.g., task description or index) and can
+ * execute the appropriate action on a {@link TaskList} and display messages using {@link Ui}.
+ */
 public class Command {
     private Commands command;
     private String remainingCommand;
     private Boolean exit;
 
+    /**
+     * Constructs a Command with a type and remaining command string.
+     *
+     * @param command          The type of command (from {@link Commands} enum)
+     * @param remainingCommand The remainder of the input string, e.g., task description ond/or deadlines
+     */
     public Command(Commands command, String remainingCommand) {
         this.command = command;
         this.remainingCommand = remainingCommand.trim();
         exit = false;
     }
 
+    /**
+     * Constructs a Command with only a type.
+     *
+     * @param command The type of command (from {@link Commands} enum)
+     */
     public Command(Commands command) {
         this.command = command;
         this.remainingCommand = null;
         exit = false;
     }
 
+    /**
+     * Executes this command on the given {@link TaskList} and interacts with {@link Ui}.
+     * <p>
+     * Handles different command types using a switch statement:
+     * <ul>
+     *     <li>LIST – prints the current task list</li>
+     *     <li>MARK / UNMARK / DELETE – modifies tasks based on index</li>
+     *     <li>DEADLINE – adds a new deadline task</li>
+     *     <li>EVENT – adds a new event task</li>
+     *     <li>TODO – adds a new todo task</li>
+     *     <li>BYE – marks this command as exit</li>
+     *     <li>UNKNOWN – throws an exception</li>
+     * </ul>
+     * </p>
+     *
+     * @param taskList The task list to operate on
+     * @param ui       The UI to display messages
+     */
     public void execute(TaskList taskList, Ui ui) {
         try {
             switch (command) {
@@ -126,15 +162,31 @@ public class Command {
         }
     }
 
+    /**
+     * Returns the type of this command.
+     *
+     * @return The {@link Commands} type of this command
+     */
     public Commands getCommand() {
 
         return this.command;
     }
 
+
+    /**
+     * Returns the remaining user input for this command (e.g., description or index).
+     *
+     * @return The remaining command string, or null if none
+     */
     public String getRemainingCommand() {
         return this.remainingCommand;
     }
 
+    /**
+     * Checks if this command signals the program to exit.
+     *
+     * @return true if this command is BYE, false otherwise
+     */
     public boolean isExit() {
         return exit;
     }

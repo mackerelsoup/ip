@@ -8,20 +8,18 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import billy.command.Command;
-import billy.command.Commands;
+import billy.command.*;
 import billy.task.Deadlines;
 import billy.task.Events;
 import billy.task.ToDos;
 import billy.task.Task;
-
-
+import billy.ui.Ui;
 
 
 /**
  * Utility class for parsing user input commands and task data.
  * <p>
- * Provides methods to parse commands into {@link Command} objects, convert date and time strings
+ * Provides methods to parse commands into {@link pingpong} objects, convert date and time strings
  * into {@link LocalDateTime} objects, and parse saved task lines from storage into {@link Task} objects.
  * </p>
  */
@@ -90,36 +88,36 @@ public class Parser {
 
 
     /**
-     * Parses a full user command string into a {@link Command} object.
+     * Parses a full user command string into a {@link pingpong} object.
      *
      * @param command the full user command string
-     * @return Command object corresponding to the input
+     * @return pingpong object corresponding to the input
      */
-    public static Command parseFullCommand(String command) {
+    public static Command parseCommand(String command) {
         String[] parts = command.split("\\s+", 2);
         String arguments = parts.length > 1 ? parts[1] : "";
 
         switch (parts[0].toLowerCase()) {
         case "list":
-            return new Command(Commands.LIST);
+            return new ListCommand(arguments);
         case "mark":
-            return new Command(Commands.MARK, arguments);
+            return new MarkCommand(arguments);
         case "unmark":
-            return new Command(Commands.UNMARK, arguments);
+            return new UnmarkCommand(arguments);
         case "find":
-            return new Command(Commands.FIND, arguments);
+            return new FindCommand(arguments);
         case "delete":
-            return new Command(Commands.DELETE, arguments);
+            return new DeleteCommand(arguments);
         case "deadline":
-            return new Command(Commands.DEADLINE, arguments);
+            return new DeadlineCommand(arguments);
         case "event":
-            return new Command(Commands.EVENT, arguments);
+            return new EventCommand(arguments);
         case "todo":
-            return new Command(Commands.TODO, arguments);
+            return new TodoCommand(arguments);
         case "bye":
-            return new Command(Commands.BYE);
+            return new ExitCommand(arguments);
         default:
-            return new Command(Commands.UNKNOWN);
+            return new UnknownCommand(arguments);
         }
     }
 
@@ -129,7 +127,7 @@ public class Parser {
      * @param command the command string
      * @return Commands enum corresponding to the input
      */
-    public static Commands parseCommand(String command) {
+    public static Commands parseStorageCommand(String command) {
         switch (command) {
         case "list":
             return Commands.LIST;
@@ -165,52 +163,56 @@ public class Parser {
      * @return ArrayList of tasks
      * @throws IllegalArgumentException if a line is malformed or contains invalid commands
      */
-    public static ArrayList<Task> parseLines(ArrayList<String> lines) throws IllegalArgumentException  {
+    public static ArrayList<Task> parseStorageLines(ArrayList<String> lines, Ui ui) {
         ArrayList<Task> tasks = new ArrayList<>();
-        for (int lineCount = 0; lineCount < lines.size(); lineCount++) {
-            String[] parts = lines.get(lineCount).split("\\|");
-            for (int i = 0; i < parts.length; i++) {
-                parts[i] = parts[i].trim();
-            }
 
-            Commands command = parseCommand(parts[0]);
-            if (parts.length < 3) {
-                throw new IllegalArgumentException("Line " + lineCount + " invalid command format");
-            }
-
-            boolean done = Integer.parseInt(parts[1]) != 0 ;
-
-            switch (command) {
-            case DEADLINE: {
-                if (parts.length < 4) {
-                    throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
+        try {
+            for (int lineCount = 0; lineCount < lines.size(); lineCount++) {
+                String[] parts = lines.get(lineCount).split("\\|");
+                for (int i = 0; i < parts.length; i++) {
+                    parts[i] = parts[i].trim();
                 }
-                tasks.add(new Deadlines(parts[2], done, parts[3]));
-                break;
-            }
-            case EVENT: {
-                if (parts.length < 5) {
-                    throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
+
+                Commands command = parseStorageCommand(parts[0]);
+                if (parts.length < 3) {
+                    throw new IllegalArgumentException("Line " + lineCount + " invalid command format");
                 }
-                tasks.add(new Events(parts[2], done, parts[3], parts[4]));
-                break;
+
+                boolean done = Integer.parseInt(parts[1]) != 0 ;
+
+                switch (command) {
+                case DEADLINE: {
+                    if (parts.length < 4) {
+                        throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
+                    }
+                    tasks.add(new Deadlines(parts[2], done, parts[3]));
+                    break;
+                }
+                case EVENT: {
+                    if (parts.length < 5) {
+                        throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
+                    }
+                    tasks.add(new Events(parts[2], done, parts[3], parts[4]));
+                    break;
+                }
+                case TODO: {
+                    tasks.add(new ToDos(parts[2], done));
+                    break;
+                }
+                default: {
+                    throw new IllegalArgumentException("File contains invalid commands");
+                }
+                }
             }
-            case TODO: {
-                tasks.add(new ToDos(parts[2], done));
-                break;
-            }
-            default: {
-                throw new IllegalArgumentException("File contains invalid commands");
-            }
-            }
+
+            ui.printListLoaded(tasks);
+
+            return tasks;
+        } catch (IllegalArgumentException exception) {
+            ui.showIllegalArgumentMessage(exception.getMessage());
+            return new ArrayList<>();
         }
 
-        System.out.println("List loaded: ");
-        for (Task task : tasks) {
-            task.printStatus();
-        }
-
-        return tasks;
     }
 
 }

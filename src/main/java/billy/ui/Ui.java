@@ -14,7 +14,7 @@ import java.util.Scanner;
  * receiving user input, and formatting outputs.
  */
 public class Ui {
-    private Scanner input;
+    private final Scanner input;
 
     /**
      * Constructs a Ui object with a Scanner for user input.
@@ -62,7 +62,7 @@ public class Ui {
      *
      * @param taskList the list of tasks
      */
-    public void addTask(TaskList taskList) {
+    public void printAddTask(TaskList taskList) {
         System.out.println("Got it, I've added this task:");
         System.out.print("    ");
         taskList.getLatestTask().printStatus();
@@ -75,7 +75,7 @@ public class Ui {
      * @param taskList the list of tasks
      * @param index the index of the task in the list
      */
-    public void markTask(TaskList taskList, int index) {
+    public void printMarkTask(TaskList taskList, int index) {
         System.out.println("Nice! I've marked this task as done:");
         System.out.print("    ");
         taskList.printTask(index);
@@ -87,7 +87,7 @@ public class Ui {
      * @param taskList the list of tasks
      * @param index the index of the task in the list
      */
-    public void unmarkTask(TaskList taskList, int index) {
+    public void printUnmarkTask(TaskList taskList, int index) {
         System.out.println("Ok! I've marked this task as not done yet:");
         System.out.print("    ");
         taskList.printTask(index);
@@ -99,11 +99,18 @@ public class Ui {
      * @param taskList the list of tasks
      * @param task the task that was removed
      */
-    public void removeTask(TaskList taskList, Task task) {
+    public void printRemoveTask(TaskList taskList, Task task) {
         System.out.println("Noted I've removed this task:");
         System.out.print("   ");
         task.printStatus();
         printNumberOfTasks(taskList);
+    }
+
+    public void printListLoaded(ArrayList<Task> taskList) {
+        System.out.println("List loaded: ");
+        for (Task task : taskList) {
+            task.printStatus();
+        }
     }
 
     /**
@@ -119,7 +126,7 @@ public class Ui {
     /**
      * Prints the goodbye message at program exit.
      */
-    public void bye() {
+    public void printBye() {
         divider();
         System.out.println("Bye. Hope to see you again soon!");
         divider();
@@ -162,7 +169,7 @@ public class Ui {
     /**
      * Displays a message when an unknown error occurs.
      */
-    public void showUnknwonErrorMessage() {
+    public void showUnknownErrorMessage() {
         System.out.println("An unknown error occurred");
     }
 }

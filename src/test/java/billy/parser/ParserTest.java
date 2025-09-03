@@ -1,6 +1,6 @@
 package billy.parser;
 
-import billy.command.Command;
+import billy.command.pingpong;
 import billy.command.Commands;
 import billy.task.Deadlines;
 import billy.task.Events;
@@ -61,14 +61,14 @@ class   ParserTest {
 
     @Test
     void testParseFullCommandKnown() {
-        Command cmd = Parser.parseFullCommand("mark 3");
+        pingpong cmd = Parser.parseFullCommand("mark 3");
         Assertions.assertEquals(Commands.MARK, cmd.getCommand());
         assertEquals("3", cmd.getRemainingCommand());
     }
 
     @Test
     void testParseFullCommandUnknown() {
-        Command cmd = Parser.parseFullCommand("foobar something");
+        pingpong cmd = Parser.parseFullCommand("foobar something");
         assertEquals(Commands.UNKNOWN, cmd.getCommand());
     }
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CommandTest {
+class pingpongTest {
 
     private TaskList taskList;
     private Ui ui;
@@ -23,22 +23,22 @@ class CommandTest {
 
     @Test
     void testListCommand() {
-        Command command = new Command(Commands.LIST);
-        assertDoesNotThrow(() -> command.execute(taskList, ui));
+        pingpong pingpong = new pingpong(Commands.LIST);
+        assertDoesNotThrow(() -> pingpong.execute(taskList, ui));
     }
 
     @Test
     void testAddTodo() {
-        Command command = new Command(Commands.TODO, "read book");
-        command.execute(taskList, ui);
+        pingpong pingpong = new pingpong(Commands.TODO, "read book");
+        pingpong.execute(taskList, ui);
         assertEquals(1, taskList.getSize());
         assertEquals("read book", taskList.getTask(0).getDescription());
     }
 
     @Test
     void testAddDeadlineValid() {
-        Command command = new Command(Commands.DEADLINE, "submit homework /by tomorrow");
-        command.execute(taskList, ui);
+        pingpong pingpong = new pingpong(Commands.DEADLINE, "submit homework /by tomorrow");
+        pingpong.execute(taskList, ui);
         assertEquals(1, taskList.getSize());
         Task t = taskList.getTask(0);
         assertTrue(t instanceof billy.task.Deadlines);
@@ -47,15 +47,15 @@ class CommandTest {
 
     @Test
     void testAddDeadlineMissingBy() {
-        Command command = new Command(Commands.DEADLINE, "submit homework");
-        assertDoesNotThrow(() -> command.execute(taskList, ui)); // shouldn't crash
+        pingpong pingpong = new pingpong(Commands.DEADLINE, "submit homework");
+        assertDoesNotThrow(() -> pingpong.execute(taskList, ui)); // shouldn't crash
         assertEquals(0, taskList.getSize()); // should not add anything
     }
 
     @Test
     void testAddEventValid() {
-        Command command = new Command(Commands.EVENT, "project meeting /from Monday /to Tuesday");
-        command.execute(taskList, ui);
+        pingpong pingpong = new pingpong(Commands.EVENT, "project meeting /from Monday /to Tuesday");
+        pingpong.execute(taskList, ui);
         assertEquals(1, taskList.getSize());
         Task t = taskList.getTask(0);
         assertTrue(t instanceof billy.task.Events);
@@ -64,51 +64,51 @@ class CommandTest {
 
     @Test
     void testAddEventMissingParts() {
-        Command command = new Command(Commands.EVENT, "project meeting /from Monday");
-        assertDoesNotThrow(() -> command.execute(taskList, ui));
+        pingpong pingpong = new pingpong(Commands.EVENT, "project meeting /from Monday");
+        assertDoesNotThrow(() -> pingpong.execute(taskList, ui));
         assertEquals(0, taskList.getSize());
     }
 
     @Test
     void testMarkAndUnmarkValid() {
         // add a todo first
-        new Command(Commands.TODO, "read book").execute(taskList, ui);
+        new pingpong(Commands.TODO, "read book").execute(taskList, ui);
 
-        Command markCommand = new Command(Commands.MARK, "1");
-        markCommand.execute(taskList, ui);
+        pingpong markPingpong = new pingpong(Commands.MARK, "1");
+        markPingpong.execute(taskList, ui);
         assertTrue(taskList.getTask(0).isDone());
 
-        Command unmarkCommand = new Command(Commands.UNMARK, "1");
-        unmarkCommand.execute(taskList, ui);
+        pingpong unmarkPingpong = new pingpong(Commands.UNMARK, "1");
+        unmarkPingpong.execute(taskList, ui);
         assertFalse(taskList.getTask(0).isDone());
     }
 
     @Test
     void testDeleteValid() {
-        new Command(Commands.TODO, "task1").execute(taskList, ui);
+        new pingpong(Commands.TODO, "task1").execute(taskList, ui);
         assertEquals(1, taskList.getSize());
 
-        Command deleteCommand = new Command(Commands.DELETE, "1");
-        deleteCommand.execute(taskList, ui);
+        pingpong deletePingpong = new pingpong(Commands.DELETE, "1");
+        deletePingpong.execute(taskList, ui);
         assertEquals(0, taskList.getSize());
     }
 
     @Test
     void testDeleteOutOfRange() {
-        Command deleteCommand = new Command(Commands.DELETE, "1");
-        assertDoesNotThrow(() -> deleteCommand.execute(taskList, ui));
+        pingpong deletePingpong = new pingpong(Commands.DELETE, "1");
+        assertDoesNotThrow(() -> deletePingpong.execute(taskList, ui));
     }
 
     @Test
     void testByeCommand() {
-        Command byeCommand = new Command(Commands.BYE);
-        byeCommand.execute(taskList, ui);
-        assertTrue(byeCommand.isExit());
+        pingpong byePingpong = new pingpong(Commands.BYE);
+        byePingpong.execute(taskList, ui);
+        assertTrue(byePingpong.isExit());
     }
 
     @Test
     void testUnknownCommand() {
-        Command unknown = new Command(Commands.UNKNOWN);
+        pingpong unknown = new pingpong(Commands.UNKNOWN);
         assertDoesNotThrow(() -> unknown.execute(taskList, ui));
     }
 }

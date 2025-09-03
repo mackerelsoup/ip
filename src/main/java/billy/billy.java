@@ -19,12 +19,12 @@ public class billy {
         boolean exit = false;
         while (!exit) {
             line = ui.getUserInput();
-            Command command = Parser.parseFullCommand(line);
+            Command command = Parser.parseCommand(line);
             command.execute(taskList, ui);
-            exit = command.isExit();
+            exit = command.shouldExit();
         }
         storage.writeFile(taskList);
-        ui.bye();
+        ui.printBye();
     }
 
     public static void main(String[] args) {
@@ -32,14 +32,7 @@ public class billy {
         Storage storage = new Storage("./data/initialList.txt");
         ArrayList<Task> intialList;
 
-        try {
-            intialList = Parser.parseLines(storage.readFile());
-        } catch (IllegalArgumentException exception) {
-            System.out.println(exception.getMessage());
-            intialList = new ArrayList<>();
-        }
-
-
+        intialList = Parser.parseStorageLines(storage.readFile(), ui);
         billy.run(intialList, ui, storage);
     }
 }

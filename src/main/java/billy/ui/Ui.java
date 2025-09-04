@@ -1,12 +1,12 @@
 package billy.ui;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import billy.task.Task;
 import billy.task.TaskList;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+
 
 
 /**
@@ -19,7 +19,7 @@ public class Ui {
     /**
      * Constructs a Ui object with a Scanner for user input.
      */
-    public Ui () {
+    public Ui() {
         this.input = new Scanner(System.in);
     }
 
@@ -49,6 +49,23 @@ public class Ui {
         taskList.printList();
     }
 
+    /**
+     * Prints the list of tasks that match a specific search criterion.
+     * <p>
+     * Each task is displayed with its index in the list (0-based) followed by its status
+     * and description. The output is printed to the console.
+     * </p>
+     *
+     * <p>Example output:</p>
+     * <pre>
+     * Here are the matching tasks in your list:
+     * 0.[T][ ] Read a book
+     * 1.[D][X] Submit report (by: 2025-09-05 23:59:59)
+     * </pre>
+     *
+     * @param matchingTasks the list of tasks that match the search criteria;
+     *                      must not be {@code null}
+     */
     public void printMatchingTasks(ArrayList<Task> matchingTasks) {
         System.out.println("Here are the matching tasks in your list:");
         for (int i = 0; i < matchingTasks.size(); i++) {
@@ -106,6 +123,23 @@ public class Ui {
         printNumberOfTasks(taskList);
     }
 
+    /**
+     * Prints all tasks that were loaded from storage.
+     * <p>
+     * This method is typically called after loading saved tasks from a file
+     * or database. Each task is printed in its current state (done or not done)
+     * with its type and description.
+     * </p>
+     *
+     * <p>Example output:</p>
+     * <pre>
+     * List loaded:
+     * [T][ ] Buy groceries
+     * [D][X] Submit report (by: 2025-09-05 23:59:59)
+     * </pre>
+     *
+     * @param taskList the list of tasks that were loaded; must not be {@code null}
+     */
     public void printListLoaded(ArrayList<Task> taskList) {
         System.out.println("List loaded: ");
         for (Task task : taskList) {

@@ -23,8 +23,7 @@ public class Ui {
         StringBuilder sb = new StringBuilder();
         sb.append("Here are the tasks in your list:\n");
         for (int i = 0; i < taskList.getSize(); i++) {
-            sb.append(i + 1).append(".").append(taskList.getTask(i).getStatusIcon())
-                    .append(" ").append(taskList.getTask(i).getDescription()).append("\n");
+            sb.append(i + 1).append(". ").append(taskList.getTask(i).getStatus()).append("\n");
         }
         return sb.toString();
     }
@@ -47,9 +46,8 @@ public class Ui {
      */
     public String getAddTask(TaskList taskList) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Got it, I've added this task:\n    ");
-        sb.append(taskList.getLatestTask().getStatusIcon())
-                .append(" ").append(taskList.getLatestTask().getDescription()).append("\n");
+        sb.append("Got it, I've added this task:\n  ");
+        sb.append(taskList.getLatestTask().getStatus()).append("\n");
         sb.append(getNumberOfTasks(taskList));
         return sb.toString();
     }
@@ -59,7 +57,7 @@ public class Ui {
      */
     public String getMarkTask(TaskList taskList, int index) {
         Task t = taskList.getTask(index - 1);
-        return "Nice! I've marked this task as done:\n    " + t.getStatusIcon() + " " + t.getDescription() + "\n";
+        return "Nice! I've marked this task as done:\n    " + t.getStatus() + "\n";
     }
 
     /**
@@ -67,7 +65,7 @@ public class Ui {
      */
     public String getUnmarkTask(TaskList taskList, int index) {
         Task t = taskList.getTask(index - 1);
-        return "Ok! I've marked this task as not done yet:\n    " + t.getStatusIcon() + " " + t.getDescription() + "\n";
+        return "Ok! I've marked this task as not done yet:\n    " + t.getStatus() + "\n";
     }
 
     /**
@@ -76,7 +74,7 @@ public class Ui {
     public String getRemoveTask(TaskList taskList, Task task) {
         StringBuilder sb = new StringBuilder();
         sb.append("Noted, I've removed this task:\n    ");
-        sb.append(task.getStatusIcon()).append(" ").append(task.getDescription()).append("\n");
+        sb.append(task.getStatus()).append("\n");
         sb.append(getNumberOfTasks(taskList));
         return sb.toString();
     }
@@ -88,7 +86,7 @@ public class Ui {
         StringBuilder sb = new StringBuilder();
         sb.append("List loaded:\n");
         for (Task t : taskList) {
-            sb.append(t.getStatusIcon()).append(" ").append(t.getDescription()).append("\n");
+            sb.append(t.getStatus()).append("\n");
         }
         return sb.toString();
     }

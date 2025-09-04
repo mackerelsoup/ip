@@ -26,8 +26,7 @@ public abstract class Command {
         this.isExit = false;
     }
 
-
-    public abstract void execute(TaskList tasklist, Ui ui);
+    public abstract String execute(TaskList tasklist, Ui ui);
 
     public Boolean shouldExit() {
         return isExit;

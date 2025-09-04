@@ -22,7 +22,7 @@ public class MarkCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList taskList, Ui ui) {
+    public String execute(TaskList taskList, Ui ui) {
         try {
             this.input = input.trim();
             if (input.isEmpty()) {
@@ -35,15 +35,15 @@ public class MarkCommand extends Command {
             }
 
             taskList.markTask(taskIndex - 1);
-            ui.printMarkTask(taskList, taskIndex);
+            return ui.getMarkTask(taskList, taskIndex);
 
 
         } catch (IllegalArgumentException e) {
-            ui.showIllegalArgumentMessage(e.getMessage());
+            return ui.getIllegalArgumentMessage(e.getMessage());
         } catch (ArrayIndexOutOfBoundsException e) {
-            ui.showOutOfRangeMessage();
+            return ui.getOutOfRangeMessage();
         } catch (Exception e) {
-            ui.showUnknownErrorMessage();
+            return ui.getUnknownErrorMessage();
         }
 
     }

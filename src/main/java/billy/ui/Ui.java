@@ -1,209 +1,145 @@
 package billy.ui;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import billy.task.Task;
 import billy.task.TaskList;
 
-
-
-
 /**
- * Handles all user interactions such as displaying messages,
- * receiving user input, and formatting outputs.
+ * Handles all user interactions by generating messages as strings.
  */
 public class Ui {
-    private final Scanner input;
 
     /**
-     * Constructs a Ui object with a Scanner for user input.
+     * Returns a divider line for formatting purposes.
      */
-    public Ui() {
-        this.input = new Scanner(System.in);
+    public String divider() {
+        return "_".repeat(50) + "\n";
     }
 
     /**
-     * Prints a divider line for formatting purposes.
+     * Returns the total number of tasks message.
      */
-    public void divider() {
-        String divider = "_".repeat(50);
-        System.out.println(divider);
+    public String getNumberOfTasks(TaskList taskList) {
+        return "Now you have " + taskList.getSize() + " task(s) in the list\n";
     }
 
     /**
-     * Prints the total number of tasks in the task list.
-     *
-     * @param taskList the list of tasks
+     * Returns a string representation of the full task list.
      */
-    public void printNumberOfTasks(TaskList taskList) {
-        System.out.println("Now you have " + taskList.getSize() + " task(s) in the list");
+    public String getTaskList(TaskList taskList) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Here are the tasks in your list:\n");
+        for (int i = 0; i < taskList.getSize(); i++) {
+            sb.append(i + 1).append(".").append(taskList.getTask(i).getStatusIcon())
+                    .append(" ").append(taskList.getTask(i).getDescription()).append("\n");
+        }
+        return sb.toString();
     }
 
     /**
-     * Prints all tasks in the task list.
-     *
-     * @param taskList the list of tasks
+     * Returns a string of matching tasks.
      */
-    public void printTaskList(TaskList taskList) {
-        taskList.printList();
-    }
-
-    /**
-     * Prints the list of tasks that match a specific search criterion.
-     * <p>
-     * Each task is displayed with its index in the list (0-based) followed by its status
-     * and description. The output is printed to the console.
-     * </p>
-     *
-     * <p>Example output:</p>
-     * <pre>
-     * Here are the matching tasks in your list:
-     * 0.[T][ ] Read a book
-     * 1.[D][X] Submit report (by: 2025-09-05 23:59:59)
-     * </pre>
-     *
-     * @param matchingTasks the list of tasks that match the search criteria;
-     *                      must not be {@code null}
-     */
-    public void printMatchingTasks(ArrayList<Task> matchingTasks) {
-        System.out.println("Here are the matching tasks in your list:");
+    public String getMatchingTasks(ArrayList<Task> matchingTasks) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Here are the matching tasks in your list:\n");
         for (int i = 0; i < matchingTasks.size(); i++) {
-            System.out.print(i + ".");
-            matchingTasks.get(i).printStatus();
+            sb.append(i + 1).append(".").append(matchingTasks.get(i).getStatusIcon())
+                    .append(" ").append(matchingTasks.get(i).getDescription()).append("\n");
         }
+        return sb.toString();
     }
 
     /**
-     * Prints confirmation that a task was added to the list.
-     *
-     * @param taskList the list of tasks
+     * Returns a string confirming a task was added.
      */
-    public void printAddTask(TaskList taskList) {
-        System.out.println("Got it, I've added this task:");
-        System.out.print("    ");
-        taskList.getLatestTask().printStatus();
-        printNumberOfTasks(taskList);
+    public String getAddTask(TaskList taskList) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Got it, I've added this task:\n    ");
+        sb.append(taskList.getLatestTask().getStatusIcon())
+                .append(" ").append(taskList.getLatestTask().getDescription()).append("\n");
+        sb.append(getNumberOfTasks(taskList));
+        return sb.toString();
     }
 
     /**
-     * Prints confirmation that a task was marked as done.
-     *
-     * @param taskList the list of tasks
-     * @param index the index of the task in the list
+     * Returns a string confirming a task was marked as done.
      */
-    public void printMarkTask(TaskList taskList, int index) {
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.print("    ");
-        taskList.printTask(index);
+    public String getMarkTask(TaskList taskList, int index) {
+        Task t = taskList.getTask(index - 1);
+        return "Nice! I've marked this task as done:\n    " + t.getStatusIcon() + " " + t.getDescription() + "\n";
     }
 
     /**
-     * Prints confirmation that a task was unmarked (not done).
-     *
-     * @param taskList the list of tasks
-     * @param index the index of the task in the list
+     * Returns a string confirming a task was unmarked.
      */
-    public void printUnmarkTask(TaskList taskList, int index) {
-        System.out.println("Ok! I've marked this task as not done yet:");
-        System.out.print("    ");
-        taskList.printTask(index);
+    public String getUnmarkTask(TaskList taskList, int index) {
+        Task t = taskList.getTask(index - 1);
+        return "Ok! I've marked this task as not done yet:\n    " + t.getStatusIcon() + " " + t.getDescription() + "\n";
     }
 
     /**
-     * Prints confirmation that a task was removed from the list.
-     *
-     * @param taskList the list of tasks
-     * @param task the task that was removed
+     * Returns a string confirming a task was removed.
      */
-    public void printRemoveTask(TaskList taskList, Task task) {
-        System.out.println("Noted I've removed this task:");
-        System.out.print("   ");
-        task.printStatus();
-        printNumberOfTasks(taskList);
+    public String getRemoveTask(TaskList taskList, Task task) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Noted, I've removed this task:\n    ");
+        sb.append(task.getStatusIcon()).append(" ").append(task.getDescription()).append("\n");
+        sb.append(getNumberOfTasks(taskList));
+        return sb.toString();
     }
 
     /**
-     * Prints all tasks that were loaded from storage.
-     * <p>
-     * This method is typically called after loading saved tasks from a file
-     * or database. Each task is printed in its current state (done or not done)
-     * with its type and description.
-     * </p>
-     *
-     * <p>Example output:</p>
-     * <pre>
-     * List loaded:
-     * [T][ ] Buy groceries
-     * [D][X] Submit report (by: 2025-09-05 23:59:59)
-     * </pre>
-     *
-     * @param taskList the list of tasks that were loaded; must not be {@code null}
+     * Returns a string of all tasks loaded from storage.
      */
-    public void printListLoaded(ArrayList<Task> taskList) {
-        System.out.println("List loaded: ");
-        for (Task task : taskList) {
-            task.printStatus();
+    public String getListLoaded(ArrayList<Task> taskList) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("List loaded:\n");
+        for (Task t : taskList) {
+            sb.append(t.getStatusIcon()).append(" ").append(t.getDescription()).append("\n");
         }
+        return sb.toString();
     }
 
     /**
-     * Prints the introduction message at program start.
+     * Returns the introduction message.
      */
-    public void intro() {
-        divider();
-        System.out.println("Hello, I'm billy.billy");
-        System.out.println("What can I do for you?");
-        divider();
+    public String getIntro() {
+        return divider() + "Hello, I'm Billy!\nWhat can I do for you?\n" + divider();
     }
 
     /**
-     * Prints the goodbye message at program exit.
+     * Returns the goodbye message.
      */
-    public void printBye() {
-        divider();
-        System.out.println("Bye. Hope to see you again soon!");
-        divider();
+    public String getBye() {
+        return divider() + "Bye. Hope to see you again soon!\n" + divider();
     }
 
     /**
-     * Prompts the user for input and returns it as a string.
-     *
-     * @return the user input
+     * Returns an invalid index message.
      */
-    public String getUserInput() {
-        divider();
-        System.out.print("Your input: ");
-        return input.nextLine();
+    public String getInvalidIndexMessage() {
+        return "Enter a valid index\n";
     }
 
     /**
-     * Displays an error message for invalid index inputs.
+     * Returns a string for illegal argument messages.
      */
-    public void showInvalidIndexMessage() {
-        System.out.println("Enter a valid index");
+    public String getIllegalArgumentMessage(String message) {
+        return message + "\n";
     }
 
     /**
-     * Displays an error message with details from an illegal argument.
-     *
-     * @param message the error message
+     * Returns a message for out-of-range task numbers.
      */
-    public void showIllegalArgumentMessage(String message) {
-        System.out.println(message);
+    public String getOutOfRangeMessage() {
+        return "Task number is out of range\n";
     }
 
     /**
-     * Displays an error message when the task number is out of range.
+     * Returns a message for unknown errors.
      */
-    public void showOutOfRangeMessage() {
-        System.out.println("billy.task.Task number is out of range");
-    }
-
-    /**
-     * Displays a message when an unknown error occurs.
-     */
-    public void showUnknownErrorMessage() {
-        System.out.println("An unknown error occurred");
+    public String getUnknownErrorMessage() {
+        return "An unknown error occurred\n";
     }
 }

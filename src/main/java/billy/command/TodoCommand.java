@@ -23,18 +23,18 @@ public class TodoCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList taskList, Ui ui) {
+    public String execute(TaskList taskList, Ui ui) {
         this.input = input.trim();
         try {
             if (input.isEmpty()) {
                 throw new IllegalArgumentException("Description of a todo cannot be empty");
             }
             taskList.addTask(new ToDos(input));
-            ui.printAddTask(taskList);
+            return ui.getAddTask(taskList);
         } catch (IllegalArgumentException e) {
-            ui.showIllegalArgumentMessage(e.getMessage());
+            return ui.getIllegalArgumentMessage(e.getMessage());
         } catch (Exception e) {
-            ui.showUnknownErrorMessage();
+            return ui.getUnknownErrorMessage();
         }
 
     }

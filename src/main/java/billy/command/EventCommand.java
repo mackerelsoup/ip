@@ -42,7 +42,7 @@ public class EventCommand extends Command {
      * @param ui       the user interface used for displaying messages to the user
      */
     @Override
-    public void execute(TaskList taskList, Ui ui) {
+    public String execute(TaskList taskList, Ui ui) {
         input = input.trim();
         try {
             if (input.isEmpty()) {
@@ -64,12 +64,12 @@ public class EventCommand extends Command {
             }
 
             taskList.addTask(new Events(description, false, eventStart, eventEnd));
-            ui.printAddTask(taskList);
+            return ui.getAddTask(taskList);
 
         } catch (IllegalArgumentException e) {
-            ui.showIllegalArgumentMessage(e.getMessage());
+            return ui.getIllegalArgumentMessage(e.getMessage());
         } catch (Exception e) {
-            ui.showUnknownErrorMessage();
+            return ui.getUnknownErrorMessage();
         }
 
     }

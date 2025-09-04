@@ -39,7 +39,7 @@ public class DeleteCommand extends Command {
      * @param ui       the user interface used to display messages to the user
      */
     @Override
-    public void execute(TaskList taskList, Ui ui) {
+    public String execute(TaskList taskList, Ui ui) {
         try {
             this.input = input.trim();
             if (input.isEmpty()) {
@@ -52,15 +52,15 @@ public class DeleteCommand extends Command {
             }
 
             Task removedTask = taskList.removeTask(taskIndex - 1);
-            ui.printRemoveTask(taskList, removedTask);
+            return ui.getRemoveTask(taskList, removedTask);
 
 
         } catch (IllegalArgumentException e) {
-            ui.showIllegalArgumentMessage(e.getMessage());
+            return ui.getIllegalArgumentMessage(e.getMessage());
         } catch (ArrayIndexOutOfBoundsException e) {
-            ui.showOutOfRangeMessage();
+            return ui.getOutOfRangeMessage();
         } catch (Exception e) {
-            ui.showUnknownErrorMessage();
+            return ui.getUnknownErrorMessage();
         }
 
     }

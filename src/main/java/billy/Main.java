@@ -2,8 +2,6 @@ package billy;
 
 import java.io.IOException;
 
-import billy.BillyGui;
-import billy.MainWindow;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

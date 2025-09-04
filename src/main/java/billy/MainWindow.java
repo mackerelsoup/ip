@@ -1,5 +1,7 @@
 package billy;
 
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -7,6 +9,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+
+
 /**
  * Controller for the main GUI.
  */
@@ -48,5 +53,11 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getDukeDialog(response, dukeImage)
         );
         userInput.clear();
+
+        if (response.toLowerCase().contains("bye")) {
+            PauseTransition delay = new PauseTransition(Duration.seconds(1)); // 1 second delay
+            delay.setOnFinished(event -> Platform.exit());
+            delay.play();
+        }
     }
 }

@@ -44,6 +44,11 @@ public class ToDos extends Task {
         System.out.printf("[T][%s] %s\n", getStatusIcon(), this.description);
     }
 
+    @Override
+    public String getStatus() {
+        return String.format("[T][%s] %s", getStatusIcon(), this.description);
+    }
+
 
     /**
      * Returns a string representation of this task formatted for storage in a file.

@@ -9,14 +9,6 @@ import billy.task.TaskList;
  * Handles all user interactions by generating messages as strings.
  */
 public class Ui {
-
-    /**
-     * Returns a divider line for formatting purposes.
-     */
-    public String divider() {
-        return "_".repeat(50) + "\n";
-    }
-
     /**
      * Returns the total number of tasks message.
      */
@@ -105,14 +97,14 @@ public class Ui {
      * Returns the introduction message.
      */
     public String getIntro() {
-        return divider() + "Hello, I'm Billy!\nWhat can I do for you?\n" + divider();
+        return "Hello, I'm Billy!\nWhat can I do for you?\n";
     }
 
     /**
      * Returns the goodbye message.
      */
     public String getBye() {
-        return divider() + "Bye. Hope to see you again soon!\n" + divider();
+        return "Bye. Hope to see you again soon!\n";
     }
 
     /**

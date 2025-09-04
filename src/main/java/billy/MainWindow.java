@@ -36,7 +36,7 @@ public class MainWindow extends AnchorPane {
     }
 
     /** Injects the Duke instance */
-    public void setDuke(BillyGui d) {
+    public void setBilly(BillyGui d) {
         billy = d;
     }
 
@@ -55,7 +55,7 @@ public class MainWindow extends AnchorPane {
         userInput.clear();
 
         if (response.toLowerCase().contains("bye")) {
-            PauseTransition delay = new PauseTransition(Duration.seconds(1)); // 1 second delay
+            PauseTransition delay = new PauseTransition(Duration.seconds(1));
             delay.setOnFinished(event -> Platform.exit());
             delay.play();
         }

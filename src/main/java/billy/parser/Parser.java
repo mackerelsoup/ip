@@ -182,7 +182,7 @@ public class Parser {
      * @param ui    the user interface used to display messages
      * @return the list of parsed Task objects
      */
-    public static ArrayList<Task> parseStorageLines(ArrayList<String> lines, Ui ui) {
+    public static ParseResult parseStorageLines(ArrayList<String> lines, Ui ui) {
         ArrayList<Task> tasks = new ArrayList<>();
 
         try {
@@ -222,13 +222,9 @@ public class Parser {
                 }
                 }
             }
-
-            ui.printListLoaded(tasks);
-
-            return tasks;
+            return new ParseResult(tasks, ui.getListLoaded(tasks));
         } catch (IllegalArgumentException exception) {
-            ui.showIllegalArgumentMessage(exception.getMessage());
-            return new ArrayList<>();
+            return new ParseResult(new ArrayList<>(), ui.getIllegalArgumentMessage(exception.getMessage()));
         }
 
     }

@@ -8,20 +8,35 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import billy.command.*;
+import billy.command.Command;
+import billy.command.Commands;
+import billy.command.DeadlineCommand;
+import billy.command.DeleteCommand;
+import billy.command.EventCommand;
+import billy.command.ExitCommand;
+import billy.command.FindCommand;
+import billy.command.ListCommand;
+import billy.command.MarkCommand;
+import billy.command.TodoCommand;
+import billy.command.UnknownCommand;
+import billy.command.UnmarkCommand;
 import billy.task.Deadlines;
 import billy.task.Events;
-import billy.task.ToDos;
 import billy.task.Task;
+import billy.task.ToDos;
 import billy.ui.Ui;
 
 
 /**
- * Utility class for parsing user input commands and task data.
+ * Utility class for parsing user input and storage data into commands and tasks.
  * <p>
- * Provides methods to parse commands into {@link pingpong} objects, convert date and time strings
- * into {@link LocalDateTime} objects, and parse saved task lines from storage into {@link Task} objects.
- * </p>
+ * Provides methods for:
+ * <ul>
+ *   <li>Parsing raw user commands into {@link Command} objects.</li>
+ *   <li>Parsing stored data lines into {@link Task} objects.</li>
+ *   <li>Converting {@link LocalDateTime} objects to formatted strings.</li>
+ *   <li>Parsing dates and times from strings, including handling end-of-day conversions.</li>
+ * </ul>
  */
 public class Parser {
 
@@ -78,7 +93,7 @@ public class Parser {
         } catch (DateTimeParseException exception) {
             try {
                 LocalDate date = LocalDate.parse(time);
-                return endOfDay? date.atTime(LocalTime.MAX) : date.atStartOfDay();
+                return endOfDay ? date.atTime(LocalTime.MAX) : date.atStartOfDay();
             } catch (DateTimeParseException exception2) {
                 throw new DateTimeParseException("Not a valid date or date time",
                         exception2.getParsedString(), exception2.getErrorIndex());
@@ -88,10 +103,10 @@ public class Parser {
 
 
     /**
-     * Parses a full user command string into a {@link pingpong} object.
+     * Parses a raw user input string into the corresponding {@link Command} object.
      *
-     * @param command the full user command string
-     * @return pingpong object corresponding to the input
+     * @param command the raw user input string
+     * @return the corresponding Command object, or {@link UnknownCommand} if unrecognized
      */
     public static Command parseCommand(String command) {
         String[] parts = command.split("\\s+", 2);
@@ -122,10 +137,10 @@ public class Parser {
     }
 
     /**
-     * Parses a single command string into a {@link Commands} enum.
+     * Parses a storage string into a {@link Commands} enum.
      *
-     * @param command the command string
-     * @return Commands enum corresponding to the input
+     * @param command the storage string representing a command
+     * @return the corresponding Commands enum, or {@link Commands#UNKNOWN} if unrecognized
      */
     public static Commands parseStorageCommand(String command) {
         switch (command) {
@@ -153,15 +168,19 @@ public class Parser {
     }
 
     /**
-     * Parses a list of saved task lines from storage into {@link Task} objects.
+     * Parses storage lines from a file into an {@link ArrayList} of {@link Task} objects.
      * <p>
-     * Each line is expected to have the format: {@code type|done|description|[additional info]}
-     * where {@code type} is one of todo, deadline, or event.
+     * Each line should follow the format:
+     * <pre>
+     *     command|doneFlag|description|[additional fields for deadline/event]
+     * </pre>
+     * If the line is invalid, an error message is displayed using {@link Ui},
+     * and an empty list is returned.
      * </p>
      *
-     * @param lines the lines to parse
-     * @return ArrayList of tasks
-     * @throws IllegalArgumentException if a line is malformed or contains invalid commands
+     * @param lines the list of lines from storage
+     * @param ui    the user interface used to display messages
+     * @return the list of parsed Task objects
      */
     public static ArrayList<Task> parseStorageLines(ArrayList<String> lines, Ui ui) {
         ArrayList<Task> tasks = new ArrayList<>();
@@ -172,13 +191,12 @@ public class Parser {
                 for (int i = 0; i < parts.length; i++) {
                     parts[i] = parts[i].trim();
                 }
-
                 Commands command = parseStorageCommand(parts[0]);
                 if (parts.length < 3) {
                     throw new IllegalArgumentException("Line " + lineCount + " invalid command format");
                 }
 
-                boolean done = Integer.parseInt(parts[1]) != 0 ;
+                boolean done = Integer.parseInt(parts[1]) != 0;
 
                 switch (command) {
                 case DEADLINE: {

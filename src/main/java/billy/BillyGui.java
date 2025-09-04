@@ -1,12 +1,10 @@
 package billy;
 
-import java.util.ArrayList;
 
 import billy.command.Command;
 import billy.parser.ParseResult;
 import billy.parser.Parser;
 import billy.storage.Storage;
-import billy.task.Task;
 import billy.task.TaskList;
 import billy.ui.Ui;
 

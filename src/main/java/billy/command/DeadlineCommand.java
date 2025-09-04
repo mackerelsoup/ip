@@ -41,7 +41,7 @@ public class DeadlineCommand extends Command {
      * @param ui       the user interface used for displaying output messages
      */
     @Override
-    public void execute(TaskList taskList, Ui ui) {
+    public String execute(TaskList taskList, Ui ui) {
         input = input.trim();
         try {
             if (input.isEmpty()) {
@@ -60,11 +60,11 @@ public class DeadlineCommand extends Command {
             }
 
             taskList.addTask(new Deadlines(description, false, deadline));
-            ui.printAddTask(taskList);
+            return ui.getAddTask(taskList);
         } catch (IllegalArgumentException e) {
-            ui.showIllegalArgumentMessage(e.getMessage());
+            return ui.getIllegalArgumentMessage(e.getMessage());
         } catch (Exception e) {
-            ui.showUnknownErrorMessage();
+            return ui.getUnknownErrorMessage();
         }
 
     }

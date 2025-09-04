@@ -44,6 +44,15 @@ public class Deadlines extends Task {
     }
 
     @Override
+    public String getStatus() {
+        return String.format("[D][%s] %s (by: %s)",
+                getStatusIcon(),
+                this.description,
+                this.deadlineTime.map(Parser::getTime).orElseGet(() -> this.deadline));
+    }
+
+
+    @Override
     public String getFileString() {
         return String.format("deadline | %d | %s | %s\n", this.isDone ? 1 : 0, this.description,
                 this.deadlineTime.map(Parser::getIsoTime).orElseGet(() -> this.deadline));

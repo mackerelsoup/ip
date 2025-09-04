@@ -45,7 +45,7 @@ public class FindCommand extends Command {
      * @param ui       the user interface used to display the results
      */
     @Override
-    public void execute(TaskList taskList, Ui ui) {
+    public String execute(TaskList taskList, Ui ui) {
         try {
             this.input = input.trim();
             if (input.isEmpty()) {
@@ -60,13 +60,13 @@ public class FindCommand extends Command {
                 }
             }
 
-            ui.printMatchingTasks(matching);
+            return ui.getMatchingTasks(matching);
         } catch (IllegalArgumentException e) {
-            ui.showIllegalArgumentMessage(e.getMessage());
+            return ui.getIllegalArgumentMessage(e.getMessage());
         } catch (ArrayIndexOutOfBoundsException e) {
-            ui.showOutOfRangeMessage();
+            return ui.getOutOfRangeMessage();
         } catch (Exception e) {
-            ui.showUnknownErrorMessage();
+            return ui.getUnknownErrorMessage();
         }
 
     }

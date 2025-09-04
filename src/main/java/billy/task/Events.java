@@ -49,6 +49,16 @@ public class Events extends Task {
     }
 
     @Override
+    public String getStatus() {
+        return String.format("[E][%s] %s (from: %s to: %s)",
+                getStatusIcon(),
+                this.description,
+                this.eventStartTime.map(Parser::getTime).orElseGet(() -> this.eventStart),
+                this.eventEndTime.map(Parser::getTime).orElseGet(() -> this.eventEnd));
+    }
+
+
+    @Override
     public String getFileString() {
         return String.format("event | %d | %s | %s | %s\n", this.isDone ? 1 : 0, this.description,
                 this.eventStartTime.map(Parser::getIsoTime).orElseGet(() -> this.eventStart),

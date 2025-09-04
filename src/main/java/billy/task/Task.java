@@ -55,6 +55,11 @@ public class Task {
         System.out.printf("[%s] %s\n", getStatusIcon(), this.description);
     }
 
+    public String getStatus() {
+        return String.format("[%s] %s", getStatusIcon(), this.description);
+    }
+
+
     public String getFileString() {
         return String.format("T | %s", this.description);
     }

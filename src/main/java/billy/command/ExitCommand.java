@@ -30,7 +30,7 @@ public class ExitCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList tasklist, Ui ui) {
-        ui.printBye();
+    public String execute(TaskList tasklist, Ui ui) {
+        return ui.getBye();
     }
 }

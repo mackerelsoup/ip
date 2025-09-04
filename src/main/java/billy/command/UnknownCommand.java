@@ -16,7 +16,7 @@ public class UnknownCommand extends Command {
     }
 
     @Override
-    public void execute(TaskList taskList, Ui ui) {
-        ui.showIllegalArgumentMessage("Unknown command, try another command");
+    public String execute(TaskList taskList, Ui ui) {
+        return ui.getIllegalArgumentMessage("Unknown command, try another command");
     }
 }

@@ -1,6 +1,7 @@
 package billy.command;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import billy.task.Task;
 import billy.task.TaskList;
@@ -52,13 +53,9 @@ public class FindCommand extends Command {
                 throw new IllegalArgumentException("Use the proper syntax: find <task>");
             }
 
-            ArrayList<Task> matching = new ArrayList<>();
-            for (int i = 0; i < taskList.getSize(); i++) {
-                Task current = taskList.getTask(i);
-                if (current.getDescription().contains(input)) {
-                    matching.add(current);
-                }
-            }
+            List<Task> matching = taskList.getTasks().stream()
+                    .filter(task -> task.getDescription().contains(input))
+                    .toList();
 
             return ui.getMatchingTasks(matching);
         } catch (IllegalArgumentException e) {

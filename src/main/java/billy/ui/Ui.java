@@ -1,6 +1,9 @@
 package billy.ui;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import billy.task.Task;
 import billy.task.TaskList;
@@ -20,26 +23,26 @@ public class Ui {
      * Returns a string representation of the full task list.
      */
     public String getTaskList(TaskList taskList) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Here are the tasks in your list:\n");
-        for (int i = 0; i < taskList.getSize(); i++) {
-            sb.append(i + 1).append(". ").append(taskList.getTask(i).getStatus()).append("\n");
-        }
-        return sb.toString();
+        return "Here are the tasks in your list:\n"
+                + IntStream.range(0, taskList.getSize())
+                        .mapToObj(i -> (i + 1) + ". " + taskList.getTask(i).getStatus())
+                        .collect(Collectors.joining("\n")) + "\n";
     }
+
 
     /**
      * Returns a string of matching tasks.
      */
-    public String getMatchingTasks(ArrayList<Task> matchingTasks) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Here are the matching tasks in your list:\n");
-        for (int i = 0; i < matchingTasks.size(); i++) {
-            sb.append(i + 1).append(".").append(matchingTasks.get(i).getStatusIcon())
-                    .append(" ").append(matchingTasks.get(i).getDescription()).append("\n");
-        }
-        return sb.toString();
+    public String getMatchingTasks(List<Task> matchingTasks) {
+        return "Here are the matching tasks in your list:\n"
+                + IntStream.range(0, matchingTasks.size())
+                        .mapToObj(i -> {
+                            Task task = matchingTasks.get(i);
+                            return (i + 1) + "." + task.getStatusIcon() + " " + task.getDescription();
+                        })
+                        .collect(Collectors.joining("\n")) + "\n";
     }
+
 
     /**
      * Returns a string confirming a task was added.
@@ -83,13 +86,12 @@ public class Ui {
      * Returns a string of all tasks loaded from storage.
      */
     public String getListLoaded(ArrayList<Task> taskList) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("List loaded:\n");
-        for (Task t : taskList) {
-            sb.append(t.getStatus()).append("\n");
-        }
-        return sb.toString();
+        return "List loaded:\n"
+                + taskList.stream()
+                        .map(Task::getStatus)
+                        .collect(Collectors.joining("\n")) + "\n";
     }
+
 
     /**
      * Returns the introduction message.

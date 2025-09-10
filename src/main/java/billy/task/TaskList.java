@@ -1,6 +1,7 @@
 package billy.task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a list of tasks and provides operations for managing them.
@@ -126,6 +127,10 @@ public class TaskList {
      */
     public int getSize() {
         return this.tasks.size();
+    }
+
+    public List<Task> getTasks() {
+        return new ArrayList<>(this.tasks);
     }
 
 }

@@ -24,17 +24,9 @@ public class UnmarkCommand extends Command {
     @Override
     public String execute(TaskList taskList, Ui ui) {
         try {
-            this.input = input.trim();
-            if (input.isEmpty()) {
-                throw new IllegalArgumentException();
-            }
+            int taskIndex = validateAndParseIndex(taskList);
 
-            int taskIndex = Integer.parseInt(input);
-            if (taskIndex < 1 || taskIndex > taskList.getSize()) {
-                throw new ArrayIndexOutOfBoundsException("");
-            }
-
-            taskList.unmarkTask(taskIndex - 1);
+            taskList.unmarkTask(taskIndex);
             return ui.getUnmarkTask(taskList, taskIndex);
 
 

@@ -1,5 +1,6 @@
 package billy;
 
+import billy.command.CommandResponse;
 import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -47,17 +48,19 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void handleUserInput() {
         String input = userInput.getText();
-        String response = billy.getResponse(input);
-        dialogContainer.getChildren().addAll(
-                DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
-        );
-        userInput.clear();
+        CommandResponse response = billy.getResponse(input);
 
-        if (response.toLowerCase().contains("bye")) {
+        if (response.isShoudlExit()) {
             PauseTransition delay = new PauseTransition(Duration.seconds(1));
             delay.setOnFinished(event -> Platform.exit());
             delay.play();
         }
+
+        dialogContainer.getChildren().addAll(
+                DialogBox.getUserDialog(input, userImage),
+                DialogBox.getDukeDialog(response.getMessage(), dukeImage)
+        );
+        userInput.clear();
+
     }
 }

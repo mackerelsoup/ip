@@ -39,6 +39,9 @@ import billy.ui.Ui;
  * </ul>
  */
 public class Parser {
+    private static final int MINIMUM_TASK_PARTS = 3;
+    private static final int DEADLINE_PARTS = 4;
+    private static final int EVENT_PARTS = 5;
 
     /**
      * Formats a {@link LocalDateTime} to the pattern "yyyy-MM-dd HH:mm:ss".
@@ -167,66 +170,67 @@ public class Parser {
         }
     }
 
-    /**
-     * Parses storage lines from a file into an {@link ArrayList} of {@link Task} objects.
-     * <p>
-     * Each line should follow the format:
-     * <pre>
-     *     command|doneFlag|description|[additional fields for deadline/event]
-     * </pre>
-     * If the line is invalid, an error message is displayed using {@link Ui},
-     * and an empty list is returned.
-     * </p>
-     *
-     * @param lines the list of lines from storage
-     * @param ui    the user interface used to display messages
-     * @return the list of parsed Task objects
-     */
     public static ParseResult parseStorageLines(ArrayList<String> lines, Ui ui) {
         ArrayList<Task> tasks = new ArrayList<>();
 
         try {
             for (int lineCount = 0; lineCount < lines.size(); lineCount++) {
-                String[] parts = lines.get(lineCount).split("\\|");
-                for (int i = 0; i < parts.length; i++) {
-                    parts[i] = parts[i].trim();
-                }
-                Commands command = parseStorageCommand(parts[0]);
-                if (parts.length < 3) {
-                    throw new IllegalArgumentException("Line " + lineCount + " invalid command format");
-                }
-
-                boolean done = Integer.parseInt(parts[1]) != 0;
-
-                switch (command) {
-                case DEADLINE: {
-                    if (parts.length < 4) {
-                        throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
-                    }
-                    tasks.add(new Deadlines(parts[2], done, parts[3]));
-                    break;
-                }
-                case EVENT: {
-                    if (parts.length < 5) {
-                        throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
-                    }
-                    tasks.add(new Events(parts[2], done, parts[3], parts[4]));
-                    break;
-                }
-                case TODO: {
-                    tasks.add(new ToDos(parts[2], done));
-                    break;
-                }
-                default: {
-                    throw new IllegalArgumentException("File contains invalid commands");
-                }
-                }
+                Task task = parseTaskFromLine(lines.get(lineCount), lineCount);
+                tasks.add(task);
             }
             return new ParseResult(tasks, ui.getListLoaded(tasks));
         } catch (IllegalArgumentException exception) {
             return new ParseResult(new ArrayList<>(), ui.getIllegalArgumentMessage(exception.getMessage()));
         }
-
     }
 
+    private static Task parseTaskFromLine(String line, int lineCount) throws IllegalArgumentException {
+        String[] parts = splitAndTrimLine(line);
+        validateBasicFormat(parts, lineCount);
+
+        Commands command = parseStorageCommand(parts[0]);
+        boolean done = Integer.parseInt(parts[1]) != 0;
+
+        return createTaskFromParts(command, parts, done, lineCount);
+    }
+
+    private static String[] splitAndTrimLine(String line) {
+        String[] parts = line.split("\\|");
+        for (int i = 0; i < parts.length; i++) {
+            parts[i] = parts[i].trim();
+        }
+        return parts;
+    }
+
+    private static void validateBasicFormat(String[] parts, int lineCount) throws IllegalArgumentException {
+        if (parts.length < MINIMUM_TASK_PARTS) {
+            throw new IllegalArgumentException("Line " + lineCount + " invalid command format");
+        }
+    }
+
+    private static Task createTaskFromParts(Commands command, String[] parts, boolean done, int lineCount)
+            throws IllegalArgumentException {
+        switch (command) {
+        case DEADLINE:
+            validatePartsLength(parts, DEADLINE_PARTS, lineCount);
+            return new Deadlines(parts[2], done, parts[3]);
+
+        case EVENT:
+            validatePartsLength(parts, EVENT_PARTS, lineCount);
+            return new Events(parts[2], done, parts[3], parts[4]);
+
+        case TODO:
+            return new ToDos(parts[2], done);
+
+        default:
+            throw new IllegalArgumentException("File contains invalid commands");
+        }
+    }
+
+    private static void validatePartsLength(String[] parts, int expectedLength, int lineCount)
+            throws IllegalArgumentException {
+        if (parts.length < expectedLength) {
+            throw new IllegalArgumentException("Line " + lineCount + " invalid task format");
+        }
+    }
 }

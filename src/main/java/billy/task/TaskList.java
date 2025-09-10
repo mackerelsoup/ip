@@ -16,6 +16,12 @@ public class TaskList {
         this.tasks = tasks;
     }
 
+    private void validateIndex(int index) {
+        if (index < 0 || index >= this.tasks.size()) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+    }
+
     /**
      * Adds a task to the list.
      *
@@ -34,11 +40,8 @@ public class TaskList {
      * @throws ArrayIndexOutOfBoundsException if the index is invalid
      */
     public Task removeTask(int index) {
-        if (index >= 0 && index < this.tasks.size()) {
-            return this.tasks.remove(index);
-        } else {
-            throw new ArrayIndexOutOfBoundsException();
-        }
+        validateIndex(index);
+        return this.tasks.remove(index);
     }
 
     /**
@@ -49,11 +52,8 @@ public class TaskList {
      * @throws ArrayIndexOutOfBoundsException if the index is invalid
      */
     public Task getTask(int index) {
-        if (index >= 0 && index < this.tasks.size()) {
-            return this.tasks.get(index);
-        } else {
-            throw new ArrayIndexOutOfBoundsException();
-        }
+        validateIndex(index);
+        return this.tasks.get(index);
     }
 
     /**

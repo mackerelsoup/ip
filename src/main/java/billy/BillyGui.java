@@ -2,6 +2,7 @@ package billy;
 
 
 import billy.command.Command;
+import billy.command.CommandResponse;
 import billy.parser.ParseResult;
 import billy.parser.Parser;
 import billy.storage.Storage;
@@ -32,22 +33,16 @@ public class BillyGui {
         taskList = new TaskList(parseResult.getTaskList());
     }
 
-    /**
-     * Process a single line of user input and return output as a string.
-     *
-     * @param input the user's input
-     * @return the response to display in the GUI
-     */
-    public String getResponse(String input) {
+
+    public CommandResponse getResponse(String input) {
         Command command = Parser.parseCommand(input);
 
         // Capture console output into a string
         String response = command.execute(taskList, ui);
-        // Save tasks if this was an exit command
+
         if (command.shouldExit()) {
             storage.writeFile(taskList);
         }
-
-        return response;
+        return new CommandResponse(response, command.shouldExit());
     }
 }

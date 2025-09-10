@@ -24,17 +24,8 @@ public class MarkCommand extends Command {
     @Override
     public String execute(TaskList taskList, Ui ui) {
         try {
-            this.input = input.trim();
-            if (input.isEmpty()) {
-                throw new IllegalArgumentException();
-            }
-
-            int taskIndex = Integer.parseInt(input);
-            if (taskIndex < 1 || taskIndex > taskList.getSize()) {
-                throw new ArrayIndexOutOfBoundsException("");
-            }
-
-            taskList.markTask(taskIndex - 1);
+            int taskIndex = validateAndParseIndex(taskList);
+            taskList.markTask(taskIndex);
             return ui.getMarkTask(taskList, taskIndex);
 
 

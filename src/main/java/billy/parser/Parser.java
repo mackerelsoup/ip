@@ -39,6 +39,9 @@ import billy.ui.Ui;
  * </ul>
  */
 public class Parser {
+    private static final int MINIMUM_TASK_PARTS = 3;
+    private static final int DEADLINE_PARTS = 4;
+    private static final int EVENT_PARTS = 5;
 
     /**
      * Formats a {@link LocalDateTime} to the pattern "yyyy-MM-dd HH:mm:ss".
@@ -200,7 +203,7 @@ public class Parser {
     }
 
     private static void validateBasicFormat(String[] parts, int lineCount) throws IllegalArgumentException {
-        if (parts.length < 3) {
+        if (parts.length < MINIMUM_TASK_PARTS) {
             throw new IllegalArgumentException("Line " + lineCount + " invalid command format");
         }
     }
@@ -209,11 +212,11 @@ public class Parser {
             throws IllegalArgumentException {
         switch (command) {
         case DEADLINE:
-            validatePartsLength(parts, 4, lineCount);
+            validatePartsLength(parts, DEADLINE_PARTS, lineCount);
             return new Deadlines(parts[2], done, parts[3]);
 
         case EVENT:
-            validatePartsLength(parts, 5, lineCount);
+            validatePartsLength(parts, EVENT_PARTS, lineCount);
             return new Events(parts[2], done, parts[3], parts[4]);
 
         case TODO:

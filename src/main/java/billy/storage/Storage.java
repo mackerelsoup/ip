@@ -28,6 +28,7 @@ public class Storage {
      * @param filePath the path to the file used for storing tasks
      */
     public Storage(String filePath) {
+        assert filePath != null && !filePath.trim().isEmpty();
         this.file = new File(filePath);
     }
 
@@ -104,6 +105,7 @@ public class Storage {
      * @param tasks the TaskList to write to the file
      */
     public void writeFile(TaskList tasks) {
+        assert tasks != null;
         try {
             FileWriter fileWriter = new FileWriter(this.file.getPath());
             for (int i = 0; i < tasks.getSize(); ++i) {

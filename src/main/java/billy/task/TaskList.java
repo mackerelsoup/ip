@@ -14,6 +14,7 @@ public class TaskList {
     private ArrayList<Task> tasks;
 
     public TaskList(ArrayList<Task> tasks) {
+        assert tasks != null;
         this.tasks = tasks;
     }
 
@@ -30,6 +31,7 @@ public class TaskList {
      * @return {@code true} if the task was added successfully
      */
     public boolean addTask(Task task) {
+        assert task != null;
         return this.tasks.add(task);
     }
 

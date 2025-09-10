@@ -91,6 +91,7 @@ public class Parser {
      * @throws DateTimeParseException if parsing fails
      */
     public static LocalDateTime parseDateTime(String time, boolean endOfDay) throws DateTimeParseException {
+        assert time != null && !time.trim().isEmpty();
         try {
             return LocalDateTime.parse(time);
         } catch (DateTimeParseException exception) {
@@ -171,8 +172,8 @@ public class Parser {
     }
 
     public static ParseResult parseStorageLines(ArrayList<String> lines, Ui ui) {
+        assert lines != null && ui != null;
         ArrayList<Task> tasks = new ArrayList<>();
-
         try {
             for (int lineCount = 0; lineCount < lines.size(); lineCount++) {
                 Task task = parseTaskFromLine(lines.get(lineCount), lineCount);

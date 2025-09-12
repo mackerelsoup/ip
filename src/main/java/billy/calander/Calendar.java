@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 import billy.task.Events;
 
-public class Calander {
+public class Calendar {
     private TreeSet<Events> events;
 
     private static class eventComparator implements Comparator<Events> {
@@ -20,7 +20,7 @@ public class Calander {
         }
     }
 
-    public Calander() {
+    public Calendar() {
         this.events = new TreeSet<>(new eventComparator());
     }
 

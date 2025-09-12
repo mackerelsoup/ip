@@ -3,7 +3,7 @@ package billy.task;
 import java.util.ArrayList;
 import java.util.List;
 
-import billy.calander.Calander;
+import billy.calander.Calendar;
 
 /**
  * Represents a list of tasks and provides operations for managing them.
@@ -14,12 +14,12 @@ import billy.calander.Calander;
  */
 public class TaskList {
     private ArrayList<Task> tasks;
-    private Calander calander;
+    private Calendar calendar;
 
     public TaskList(ArrayList<Task> tasks) {
         assert tasks != null;
         this.tasks = tasks;
-        this.calander = new Calander();
+        this.calendar = new Calendar();
 
         initialiseCalander();
     }
@@ -29,14 +29,14 @@ public class TaskList {
                 .filter(task -> task instanceof Events)
                 .map(task -> (Events) task)
                 .filter(Events::isCompleteTimePeriod)
-                .forEach(event -> calander.add(event));
+                .forEach(event -> calendar.add(event));
 
     }
 
     public ArrayList<Events> addEventWithConflictCheck(Events event) {
         ArrayList<Events> conflicts = new ArrayList<>();
         if (event.isCompleteTimePeriod()) {
-            conflicts = calander.add(event);
+            conflicts = calendar.add(event);
         }
         this.tasks.add(event);
         return conflicts;

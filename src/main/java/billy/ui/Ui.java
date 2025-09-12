@@ -1,10 +1,12 @@
 package billy.ui;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import billy.task.Events;
 import billy.task.Task;
 import billy.task.TaskList;
 
@@ -55,11 +57,18 @@ public class Ui {
         return sb.toString();
     }
 
+    public String getAddConflictingEvent(ArrayList<Events> conflictingTasks) {
+        return "These events are conflicting with the event you have added:\n"
+                + conflictingTasks.stream()
+                .map(task -> task.getStatus())
+                .collect(Collectors.joining("\n"));
+    }
+
     /**
      * Returns a string confirming a task was marked as done.
      */
     public String getMarkTask(TaskList taskList, int index) {
-        Task t = taskList.getTask(index - 1);
+        Task t = taskList.getTask(index);
         return "Nice! I've marked this task as done:\n    " + t.getStatus() + "\n";
     }
 
@@ -67,7 +76,7 @@ public class Ui {
      * Returns a string confirming a task was unmarked.
      */
     public String getUnmarkTask(TaskList taskList, int index) {
-        Task t = taskList.getTask(index - 1);
+        Task t = taskList.getTask(index);
         return "Ok! I've marked this task as not done yet:\n    " + t.getStatus() + "\n";
     }
 
@@ -90,6 +99,19 @@ public class Ui {
                 + taskList.stream()
                         .map(Task::getStatus)
                         .collect(Collectors.joining("\n")) + "\n";
+    }
+
+    /**
+     * Returns a formatted message showing the earliest available free time slot.
+     *
+     * @param earliestTime the earliest available start time
+     * @param duration the requested duration in hours
+     * @return formatted message with the free time information
+     */
+    public String getEarliestFreeTime(LocalDateTime earliestTime, int duration) {
+        return String.format("The earliest time with free %d hour time slot is at: ", duration)
+                + earliestTime.toString()
+                + "\n";
     }
 
 
@@ -115,7 +137,10 @@ public class Ui {
     }
 
     /**
-     * Returns a string for illegal argument messages.
+     * Returns a formatted error message for illegal arguments.
+     *
+     * @param message the error message to format
+     * @return formatted error message with newline
      */
     public String getIllegalArgumentMessage(String message) {
         return message + "\n";

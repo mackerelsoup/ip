@@ -39,6 +39,12 @@ public class Events extends Task {
 
         this.eventStartTime = Parser.tryParse(eventStart, false);
         this.eventEndTime = Parser.tryParse(eventEnd, true);
+
+        if (isCompleteTimePeriod()) {
+            if (eventStartTime.get().isAfter(eventEndTime.get())) {
+                throw new IllegalArgumentException("Event end time must be greater than event start time");
+            }
+        }
     }
 
     @Override
@@ -57,11 +63,22 @@ public class Events extends Task {
                 this.eventEndTime.map(Parser::getTime).orElseGet(() -> this.eventEnd));
     }
 
-
     @Override
     public String getFileString() {
         return String.format("event | %d | %s | %s | %s\n", this.isDone ? 1 : 0, this.description,
                 this.eventStartTime.map(Parser::getIsoTime).orElseGet(() -> this.eventStart),
                 this.eventEndTime.map(Parser::getIsoTime).orElseGet(() -> this.eventEnd));
+    }
+
+    public boolean isCompleteTimePeriod() {
+        return this.eventStartTime.isPresent() && this.eventEndTime.isPresent();
+    }
+
+    public LocalDateTime getEventStartTime() {
+        return this.eventStartTime.get();
+    }
+
+    public LocalDateTime getEventEndTime() {
+        return this.eventEndTime.get();
     }
 }

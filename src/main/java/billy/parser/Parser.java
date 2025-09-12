@@ -8,22 +8,8 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import billy.command.Command;
-import billy.command.Commands;
-import billy.command.DeadlineCommand;
-import billy.command.DeleteCommand;
-import billy.command.EventCommand;
-import billy.command.ExitCommand;
-import billy.command.FindCommand;
-import billy.command.ListCommand;
-import billy.command.MarkCommand;
-import billy.command.TodoCommand;
-import billy.command.UnknownCommand;
-import billy.command.UnmarkCommand;
-import billy.task.Deadlines;
-import billy.task.Events;
-import billy.task.Task;
-import billy.task.ToDos;
+import billy.command.*;
+import billy.task.*;
 import billy.ui.Ui;
 
 
@@ -127,6 +113,8 @@ public class Parser {
             return new FindCommand(arguments);
         case "delete":
             return new DeleteCommand(arguments);
+        case "free":
+            return new FreeCommand(arguments);
         case "deadline":
             return new DeadlineCommand(arguments);
         case "event":
@@ -158,6 +146,8 @@ public class Parser {
             return Commands.FIND;
         case "delete":
             return Commands.DELETE;
+        case "free":
+            return Commands.FREE;
         case "deadline":
             return Commands.DEADLINE;
         case "event":
@@ -171,6 +161,13 @@ public class Parser {
         }
     }
 
+    /**
+     * Parses storage file lines into a ParseResult containing tasks and UI message.
+     *
+     * @param lines the list of storage file lines to parse
+     * @param ui the UI instance for generating messages
+     * @return ParseResult containing parsed tasks and success/error message
+     */
     public static ParseResult parseStorageLines(ArrayList<String> lines, Ui ui) {
         assert lines != null && ui != null;
         ArrayList<Task> tasks = new ArrayList<>();
@@ -207,6 +204,73 @@ public class Parser {
         if (parts.length < MINIMUM_TASK_PARTS) {
             throw new IllegalArgumentException("Line " + lineCount + " invalid command format");
         }
+    }
+
+    /**
+     * Parses a string input into an integer index.
+     *
+     * @param input the string to parse
+     * @return the parsed integer
+     * @throws IllegalArgumentException if input is null, empty, or not a valid integer
+     */
+    public static int parseIndex(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException("Input cannot be empty");
+        }
+
+        try {
+            return Integer.parseInt(input.trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid number format: " + input);
+        }
+    }
+
+    /**
+     * Parses a string input into a positive integer duration (in hours).
+     *
+     * @param input the string to parse
+     * @return the parsed duration in hours
+     * @throws IllegalArgumentException if input is not a positive integer
+     */
+    public static int parseDuration(String input) {
+        int duration = parseIndex(input); // Reuse existing validation
+
+        if (duration <= 0) {
+            throw new IllegalArgumentException("Duration must be a positive number");
+        }
+
+        return duration;
+    }
+
+
+    /**
+     * Validates that a 1-based task index is within the valid range and converts to 0-based.
+     *
+     * @param taskList the task list to validate against
+     * @param index the 1-based index to validate
+     * @return the converted 0-based index
+     * @throws IndexOutOfBoundsException if index is out of range
+     */
+    public static int validateTaskIndex(TaskList taskList, int index) {
+        if (index < 1 || index > taskList.getSize()) {
+            throw new ArrayIndexOutOfBoundsException("Task number must be between 1 and "
+                    + taskList.getSize());
+        }
+        return index - 1; // Convert to 0-based index
+    }
+
+    /**
+     * Parses a string input and validates it as a task index.
+     *
+     * @param taskList the task list to validate against
+     * @param input the string input to parse
+     * @return the converted 0-based index
+     * @throws IllegalArgumentException if input is not a valid integer
+     * @throws IndexOutOfBoundsException if index is out of range
+     */
+    public static int parseAndValidateTaskIndex(TaskList taskList, String input) {
+        int index = parseIndex(input);
+        return validateTaskIndex(taskList, index);
     }
 
     private static Task createTaskFromParts(Commands command, String[] parts, boolean done, int lineCount)

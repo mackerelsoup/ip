@@ -4,28 +4,38 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import billy.calander.Calendar;
+import billy.calendar.Calendar;
 
 /**
  * Represents a list of tasks and provides operations for managing them.
  * <p>
  * This class maintains a collection of {@link Task} objects and allows
  * adding, removing, retrieving, marking, unmarking, and printing tasks.
+ * It also manages a calendar for tracking events and finding free time slots.
  * </p>
  */
 public class TaskList {
     private ArrayList<Task> tasks;
     private Calendar calendar;
 
+    /**
+     * Constructs a TaskList with the given list of tasks.
+     * Initializes the calendar and adds all complete event periods to it.
+     *
+     * @param tasks the initial list of tasks
+     */
     public TaskList(ArrayList<Task> tasks) {
         assert tasks != null;
         this.tasks = tasks;
         this.calendar = new Calendar();
 
-        initialiseCalander();
+        initialiseCalendar();
     }
 
-    private void initialiseCalander() {
+    /**
+     * Initializes the calendar by adding all complete event periods from the task list.
+     */
+    private void initialiseCalendar() {
         tasks.stream()
                 .filter(task -> task instanceof Events)
                 .map(task -> (Events) task)
@@ -34,6 +44,12 @@ public class TaskList {
 
     }
 
+    /**
+     * Adds an event to the task list and checks for conflicts with existing events.
+     *
+     * @param event the event to add
+     * @return list of conflicting events, empty if no conflicts
+     */
     public ArrayList<Events> addEventWithConflictCheck(Events event) {
         ArrayList<Events> conflicts = new ArrayList<>();
         if (event.isCompleteTimePeriod()) {
@@ -43,11 +59,24 @@ public class TaskList {
         return conflicts;
     }
 
+    /**
+     * Finds the earliest free time slot that can accommodate the specified duration.
+     *
+     * @param currentTime the starting time to search from
+     * @param duration the required duration in hours
+     * @return the earliest available time slot
+     */
     public LocalDateTime getEarliestFreeTime(LocalDateTime currentTime, int duration) {
         return calendar.getEarliestFreeTime(currentTime, duration);
     }
 
 
+    /**
+     * Validates that the given index is within the valid range for the task list.
+     *
+     * @param index the 0-based index to validate
+     * @throws ArrayIndexOutOfBoundsException if the index is invalid
+     */
     private void validateIndex(int index) {
         if (index < 0 || index >= this.tasks.size()) {
             throw new ArrayIndexOutOfBoundsException();
@@ -106,12 +135,8 @@ public class TaskList {
      * @throws ArrayIndexOutOfBoundsException if the index is invalid
      */
     public void markTask(int index) {
-        if (index >= 0 && index < this.tasks.size()) {
-            this.tasks.get(index).setDone();
-
-        } else {
-            throw new ArrayIndexOutOfBoundsException();
-        }
+        validateIndex(index);
+        this.tasks.get(index).setDone();
     }
 
     /**
@@ -121,11 +146,8 @@ public class TaskList {
      * @throws ArrayIndexOutOfBoundsException if the index is invalid
      */
     public void unmarkTask(int index) {
-        if (index >= 0 && index < this.tasks.size()) {
-            this.tasks.get(index).setUndone();
-        } else {
-            throw new ArrayIndexOutOfBoundsException();
-        }
+        validateIndex(index);
+        this.tasks.get(index).setUndone();
     }
 
     /**
@@ -135,11 +157,8 @@ public class TaskList {
      * @throws ArrayIndexOutOfBoundsException if the index is invalid
      */
     public void printTask(int index) {
-        if (index >= 0 && index < this.tasks.size()) {
-            this.tasks.get(index).printStatus();
-        } else {
-            throw new ArrayIndexOutOfBoundsException();
-        }
+        validateIndex(index);
+        this.tasks.get(index).printStatus();
     }
 
     /**
@@ -161,6 +180,11 @@ public class TaskList {
         return this.tasks.size();
     }
 
+    /**
+     * Returns a copy of the task list.
+     *
+     * @return a new ArrayList containing all tasks
+     */
     public List<Task> getTasks() {
         return new ArrayList<>(this.tasks);
     }

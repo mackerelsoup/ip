@@ -20,10 +20,7 @@ import billy.command.MarkCommand;
 import billy.command.TodoCommand;
 import billy.command.UnknownCommand;
 import billy.command.UnmarkCommand;
-import billy.task.Deadlines;
-import billy.task.Events;
-import billy.task.Task;
-import billy.task.ToDos;
+import billy.task.*;
 import billy.ui.Ui;
 
 
@@ -207,6 +204,30 @@ public class Parser {
         if (parts.length < MINIMUM_TASK_PARTS) {
             throw new IllegalArgumentException("Line " + lineCount + " invalid command format");
         }
+    }
+    public static int parseIndex(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            throw new IllegalArgumentException("Input cannot be empty");
+        }
+
+        try {
+            return Integer.parseInt(input.trim());
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid number format: " + input);
+        }
+    }
+
+    public static int validateTaskIndex(TaskList taskList, int index) {
+        if (index < 1 || index > taskList.getSize()) {
+            throw new IndexOutOfBoundsException("Task number must be between 1 and "
+                    + taskList.getSize());
+        }
+        return index - 1; // Convert to 0-based index
+    }
+
+    public static int parseAndValidateTaskIndex(TaskList taskList, String input) {
+        int index = parseIndex(input);
+        return validateTaskIndex(taskList, index);
     }
 
     private static Task createTaskFromParts(Commands command, String[] parts, boolean done, int lineCount)

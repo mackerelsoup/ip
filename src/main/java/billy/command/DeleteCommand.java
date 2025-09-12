@@ -1,5 +1,6 @@
 package billy.command;
 
+import billy.parser.Parser;
 import billy.task.Task;
 import billy.task.TaskList;
 import billy.ui.Ui;
@@ -41,11 +42,9 @@ public class DeleteCommand extends Command {
     @Override
     public String execute(TaskList taskList, Ui ui) {
         try {
-            int taskIndex = validateAndParseIndex(taskList);
+            int taskIndex = Parser.parseAndValidateTaskIndex(taskList, this.input);
             Task removedTask = taskList.removeTask(taskIndex);
             return ui.getRemoveTask(taskList, removedTask);
-
-
         } catch (IllegalArgumentException e) {
             return ui.getIllegalArgumentMessage(e.getMessage());
         } catch (ArrayIndexOutOfBoundsException e) {

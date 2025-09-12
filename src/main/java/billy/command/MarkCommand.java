@@ -1,5 +1,6 @@
 package billy.command;
 
+import billy.parser.Parser;
 import billy.task.TaskList;
 import billy.ui.Ui;
 
@@ -24,11 +25,9 @@ public class MarkCommand extends Command {
     @Override
     public String execute(TaskList taskList, Ui ui) {
         try {
-            int taskIndex = validateAndParseIndex(taskList);
+            int taskIndex = Parser.parseAndValidateTaskIndex(taskList, this.input);
             taskList.markTask(taskIndex);
             return ui.getMarkTask(taskList, taskIndex);
-
-
         } catch (IllegalArgumentException e) {
             return ui.getIllegalArgumentMessage(e.getMessage());
         } catch (ArrayIndexOutOfBoundsException e) {

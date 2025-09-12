@@ -32,14 +32,4 @@ public abstract class Command {
         return isExit;
     }
 
-    protected int validateAndParseIndex(TaskList taskList) {
-        if (this.input.trim().isEmpty()) {
-            throw new IllegalArgumentException("Input cannot be empty");
-        }
-        int taskIndex = Integer.parseInt(this.input);
-        if (taskIndex < 1 || taskIndex > taskList.getSize()) {
-            throw new ArrayIndexOutOfBoundsException("");
-        }
-        return taskIndex - 1;
-    }
 }

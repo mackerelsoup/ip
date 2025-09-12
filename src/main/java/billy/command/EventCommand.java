@@ -1,5 +1,8 @@
 package billy.command;
 
+import java.util.ArrayList;
+
+import billy.calander.Calander;
 import billy.task.Events;
 import billy.task.TaskList;
 import billy.ui.Ui;
@@ -63,8 +66,13 @@ public class EventCommand extends Command {
                 throw new IllegalArgumentException("Event description cannot be empty");
             }
 
-            taskList.addTask(new Events(description, false, eventStart, eventEnd));
-            return ui.getAddTask(taskList);
+            Events event = new Events(description, false, eventStart, eventEnd);
+            ArrayList<Events> conflictingEvents = taskList.addEventWithConflictCheck(event);
+
+            String conflictMessage = conflictingEvents.size() > 0
+                    ? ui.getAddConflictingEvent(conflictingEvents) : "";
+
+            return ui.getAddTask(taskList) + conflictMessage;
 
         } catch (IllegalArgumentException e) {
             return ui.getIllegalArgumentMessage(e.getMessage());

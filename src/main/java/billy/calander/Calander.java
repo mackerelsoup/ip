@@ -37,6 +37,7 @@ public class Calander {
                 overlappedEvents.add(e);
             }
         }
+        this.events.add(event);
         return overlappedEvents;
     }
 

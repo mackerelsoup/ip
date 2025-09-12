@@ -1,10 +1,12 @@
 package billy.ui;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import billy.task.Events;
 import billy.task.Task;
 import billy.task.TaskList;
 
@@ -55,6 +57,13 @@ public class Ui {
         return sb.toString();
     }
 
+    public String getAddConflictingEvent(ArrayList<Events> conflictingTasks) {
+        return "These events are conflicting with the event you have added:\n"
+                + conflictingTasks.stream()
+                .map(task -> task.getStatus())
+                .collect(Collectors.joining("\n"));
+    }
+
     /**
      * Returns a string confirming a task was marked as done.
      */
@@ -90,6 +99,12 @@ public class Ui {
                 + taskList.stream()
                         .map(Task::getStatus)
                         .collect(Collectors.joining("\n")) + "\n";
+    }
+
+    public String getEarliestFreeTime(LocalDateTime earliestTime, int duration) {
+        return String.format("The earliest time with free %d hour time slot is at: ", duration)
+                + earliestTime.toString()
+                + "\n";
     }
 
 

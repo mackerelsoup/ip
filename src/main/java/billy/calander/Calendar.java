@@ -41,7 +41,7 @@ public class Calendar {
         return overlappedEvents;
     }
 
-    public LocalDateTime getEarliestFreeTime(int hours, LocalDateTime currentTime) {
+    public LocalDateTime getEarliestFreeTime(LocalDateTime currentTime, int duration) {
         int index = 0;
         ArrayList<Events> filteredEvents = new ArrayList<>();
 
@@ -71,7 +71,7 @@ public class Calendar {
         }
 
         Events firstUpcomingEvent = upcomingEvents.get(0);
-        LocalDateTime proposedEndTime = earliestStartTime.plusHours(hours);
+        LocalDateTime proposedEndTime = earliestStartTime.plusHours(duration);
 
         if (proposedEndTime.isBefore(firstUpcomingEvent.getEventStartTime()) ||
                 proposedEndTime.equals(firstUpcomingEvent.getEventStartTime())) {
@@ -84,7 +84,7 @@ public class Calendar {
 
             LocalDateTime gapStart = currentEvent.getEventEndTime();
             LocalDateTime gapEnd = nextEvent.getEventStartTime();
-            LocalDateTime requiredEndTime = gapStart.plusHours(hours);
+            LocalDateTime requiredEndTime = gapStart.plusHours(duration);
 
             // Check if the required duration fits in this gap
             if (requiredEndTime.isBefore(gapEnd) || requiredEndTime.equals(gapEnd)) {

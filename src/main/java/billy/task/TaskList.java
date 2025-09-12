@@ -1,5 +1,6 @@
 package billy.task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,10 @@ public class TaskList {
         }
         this.tasks.add(event);
         return conflicts;
+    }
+
+    public LocalDateTime getEarliestFreeTime(LocalDateTime currentTime, int duration) {
+        return calendar.getEarliestFreeTime(currentTime, duration);
     }
 
 

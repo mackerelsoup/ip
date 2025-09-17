@@ -14,7 +14,7 @@
          xmlns="http://javafx.com/javafx/17"
          xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <!--Text bubble added by claude-->
+        <!--Text bubble  added by claude-->
         <Label fx:id="dialog" text="Label" wrapText="true" 
                minHeight="-Infinity" maxWidth="280.0" prefWidth="-1"
                style="-fx-background-color: #E5E5EA; -fx-text-fill: #000000; -fx-background-radius: 18; -fx-padding: 12 16 12 16; -fx-font-size: 14px;"

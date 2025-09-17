@@ -41,7 +41,8 @@ public class MainWindow extends AnchorPane {
         billy = d;
         showIntroMessage();
     }
-    
+
+
     private void showIntroMessage() {
         String introText = billy.getInto();
         dialogContainer.getChildren().add(

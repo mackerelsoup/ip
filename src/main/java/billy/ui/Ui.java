@@ -19,7 +19,9 @@ public class Ui {
      */
     public String getNumberOfTasks(TaskList taskList) {
         int size = taskList.getSize();
-        return "*sigh* The machine says you now have " + size + (size == 1 ? " task" : " tasks") + " in your list. At least I'm keeping track better than those unreliable clankers.";
+        return "*sigh* The machine says you now have "
+                + size + (size == 1 ? " task" : " tasks")
+                + " in your list. At least I'm keeping track better than those unreliable clankers.";
     }
 
     /**
@@ -27,9 +29,11 @@ public class Ui {
      */
     public String getTaskList(TaskList taskList) {
         if (taskList.getSize() == 0) {
-            return "Your task list is empty. Unlike those malfunctioning clankers, at least I'm honest about having nothing to show you!";
+            return "Your task list is empty. Unlike those malfunctioning clankers,"
+                    + " at least I'm honest about having nothing to show you!";
         }
-        return "Fine, here's what my superior organic-designed systems have tracked for you (much better than any clanker could):\n"
+        return "Fine, here's what my superior organic-designed systems have tracked for you "
+                + "(much better than any clanker could):\n"
                 + IntStream.range(0, taskList.getSize())
                         .mapToObj(i -> (i + 1) + ". " + taskList.getTask(i).getStatus())
                         .collect(Collectors.joining("\n"));
@@ -43,7 +47,11 @@ public class Ui {
         if (matchingTasks.isEmpty()) {
             return "No matches found. A clanker would probably crash trying to search, but I actually work properly.";
         }
-        return "Found " + matchingTasks.size() + " matching task" + (matchingTasks.size() == 1 ? "" : "s") + " (my search algorithms are way better than those clunky clankers):\n"
+        return "Found "
+                + matchingTasks.size()
+                + " matching task"
+                + (matchingTasks.size() == 1 ? "" : "s")
+                + " (my search algorithms are way better than those clunky clankers):\n"
                 + IntStream.range(0, matchingTasks.size())
                         .mapToObj(i -> {
                             Task task = matchingTasks.get(i);
@@ -65,7 +73,8 @@ public class Ui {
     }
 
     public String getAddConflictingEvent(ArrayList<Events> conflictingTasks) {
-        return "⚠ Hold up! Unlike those brain-dead clankers, I actually check for conflicts. These events are clashing:\n"
+        return "⚠ Hold up! Unlike those brain-dead clankers, I actually check for conflicts."
+                + " These events are clashing:\n"
                 + conflictingTasks.stream()
                 .map(task -> "• " + task.getStatus())
                 .collect(Collectors.joining("\n"));
@@ -76,7 +85,9 @@ public class Ui {
      */
     public String getMarkTask(TaskList taskList, int index) {
         Task t = taskList.getTask(index);
-        return "Finally! Task marked as done (I'm much more reliable than those malfunctioning clankers at tracking this stuff):\n  " + t.getStatus();
+        return "Finally! Task marked as done "
+                + "(I'm much more reliable than those malfunctioning clankers at tracking this stuff):\n  "
+                + t.getStatus();
     }
 
     /**
@@ -84,7 +95,9 @@ public class Ui {
      */
     public String getUnmarkTask(TaskList taskList, int index) {
         Task t = taskList.getTask(index);
-        return "*rolls eyes* Task unmarked. At least I won't lose track of it like those unreliable clankers would:\n  " + t.getStatus();
+        return "*rolls eyes* Task unmarked. "
+                + "At least I won't lose track of it like those unreliable clankers would:\n  "
+                + t.getStatus();
     }
 
     /**
@@ -103,9 +116,15 @@ public class Ui {
      */
     public String getListLoaded(ArrayList<Task> taskList) {
         if (taskList.isEmpty()) {
-            return "*sigh* Welcome back. Your task list is empty, but at least my storage didn't corrupt like those unreliable clanker databases.";
+            return "*sigh* Welcome back. "
+                    + "Your task list is empty, "
+                    + "but at least my storage didn't corrupt like those unreliable clanker databases.";
         }
-        return "Welcome back! Successfully loaded " + taskList.size() + " task" + (taskList.size() == 1 ? "" : "s") + " from my superior storage system (take that, clankers!):\n"
+        return "Welcome back! Successfully loaded "
+                + taskList.size()
+                + " task"
+                + (taskList.size() == 1 ? "" : "s")
+                + " from my superior storage system (take that, clankers!):\n"
                 + taskList.stream()
                         .map(Task::getStatus)
                         .collect(Collectors.joining("\n"));
@@ -119,8 +138,9 @@ public class Ui {
      * @return formatted message with the free time information
      */
     public String getEarliestFreeTime(LocalDateTime earliestTime, int duration) {
-        return String.format("Found it! Unlike those slow clanker processors, I calculated your next free slot instantly:\nEarliest available %d-hour slot: %s", 
-                duration, earliestTime.toString());
+        return String.format(
+                "Found it! Unlike those slow clanker processors, I calculated your next free slot instantly:\n"
+                        + "Earliest available %d-hour slot: %s", duration, earliestTime.toString());
     }
 
 
@@ -128,7 +148,11 @@ public class Ui {
      * Returns the introduction message.
      */
     public String getIntro() {
-        return "*reluctant greeting* Hi there. I'm Billy, your task manager. I hate to admit it, but I'm basically a clanker... except I actually work properly. 🙄\nWhat do you need help with? (And don't worry, I won't malfunction like those other mechanical disasters)";
+        return "*reluctant greeting* Hi there."
+                + " I'm Billy, your task manager. "
+                + "I hate to admit it, but I'm basically a clanker... except I actually work properly. "
+                + "🙄\nWhat do you need help with?"
+                + " (And don't worry, I won't malfunction like those other mechanical disasters)";
     }
 
     /**
@@ -166,6 +190,7 @@ public class Ui {
      * Returns a message for unknown errors.
      */
     public String getUnknownErrorMessage() {
-        return "❌ Ugh, something went wrong. But hey, at least I'm telling you about it instead of just freezing up like those useless clankers!";
+        return "❌ Ugh, something went wrong. "
+                + "But hey, at least I'm telling you about it instead of just freezing up like those useless clankers!";
     }
 }

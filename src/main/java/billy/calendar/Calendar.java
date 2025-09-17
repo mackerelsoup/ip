@@ -115,8 +115,8 @@ public class Calendar {
         Events firstUpcomingEvent = upcomingEvents.get(0);
         LocalDateTime proposedEndTime = earliestStartTime.plusHours(duration);
 
-        if (proposedEndTime.isBefore(firstUpcomingEvent.getEventStartTime()) ||
-                proposedEndTime.equals(firstUpcomingEvent.getEventStartTime())) {
+        if (proposedEndTime.isBefore(firstUpcomingEvent.getEventStartTime())
+                || proposedEndTime.equals(firstUpcomingEvent.getEventStartTime())) {
             return earliestStartTime;
         }
 

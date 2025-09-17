@@ -39,6 +39,14 @@ public class MainWindow extends AnchorPane {
     /** Injects the Duke instance */
     public void setBilly(BillyGui d) {
         billy = d;
+        showIntroMessage();
+    }
+    
+    private void showIntroMessage() {
+        String introText = billy.getInto();
+        dialogContainer.getChildren().add(
+                DialogBox.getDukeDialog(introText, dukeImage)
+        );
     }
 
     /**

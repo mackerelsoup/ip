@@ -33,6 +33,9 @@ public class BillyGui {
         taskList = new TaskList(parseResult.getTaskList());
     }
 
+    public String getInto() {
+        return ui.getIntro();
+    }
 
     public CommandResponse getResponse(String input) {
         Command command = Parser.parseCommand(input);

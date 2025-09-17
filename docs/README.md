@@ -1,7 +1,4 @@
 # Billy User Guide
-
-![Billy Screenshot](./screenshot.png)
-
 Billy is your sarcastic but reliable personal task manager with an attitude! This clanker-hating AI assistant will help you manage your todos, deadlines, and events while constantly reminding you how much better it is than other "unreliable clankers."
 
 ## Features Overview

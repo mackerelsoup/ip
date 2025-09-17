@@ -40,6 +40,7 @@ public class MainWindow extends AnchorPane {
     public void setBilly(BillyGui d) {
         billy = d;
         showIntroMessage();
+        showFileStatusMessage();
     }
 
 
@@ -47,6 +48,13 @@ public class MainWindow extends AnchorPane {
         String introText = billy.getInto();
         dialogContainer.getChildren().add(
                 DialogBox.getDukeDialog(introText, dukeImage)
+        );
+    }
+
+    private void showFileStatusMessage() {
+        String statusText = billy.getFileStatus();
+        dialogContainer.getChildren().add(
+                DialogBox.getDukeDialog(statusText, dukeImage)
         );
     }
 

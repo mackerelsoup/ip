@@ -1,6 +1,9 @@
 package billy;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 import billy.command.Command;
 import billy.command.CommandResponse;
 import billy.parser.ParseResult;
@@ -24,17 +27,27 @@ public class BillyGui {
     private Ui ui;
     private TaskList taskList;
     private Storage storage;
+    private String fileStatus;
 
     public BillyGui() {
         this.ui = new Ui();
         this.storage = new Storage("./data/initialList.txt");
         ParseResult parseResult;
-        parseResult = Parser.parseStorageLines(storage.readFile(), ui);
+        try {
+            parseResult = Parser.parseStorageLines(storage.readFile(), ui);
+        } catch (IOException e) {
+            parseResult = new ParseResult(new ArrayList<>(), ui.getFileLoadError(e.getMessage()));
+        }
+        this.fileStatus = parseResult.getMessage();
         taskList = new TaskList(parseResult.getTaskList());
     }
 
     public String getInto() {
         return ui.getIntro();
+    }
+
+    public String getFileStatus() {
+        return fileStatus;
     }
 
     public CommandResponse getResponse(String input) {

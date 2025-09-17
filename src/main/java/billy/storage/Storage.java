@@ -5,11 +5,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import billy.task.TaskList;
-
 
 
 /**
@@ -42,29 +42,23 @@ public class Storage {
      * @param file the file to check or create
      * @throws RuntimeException if directories or file cannot be created
      */
-    public static void ensureFileExists(File file) {
+    public static void ensureFileExists(File file) throws IOException {
         File parentDir = file.getParentFile();
 
         if (!parentDir.exists()) {
             System.out.println("Parent directory does not exists, creating directory");
             boolean created = parentDir.mkdirs();
             if (!created) {
-                throw new RuntimeException("Couldn't create parent directory " + parentDir);
+                throw new IOException(parentDir.getAbsolutePath());
             }
-            System.out.println("Parent directory created at: " + parentDir.getAbsoluteFile());
         }
 
         if (!file.exists()) {
             System.out.println("Input file does not exist, attempting to create file");
-            try {
-                boolean created = file.createNewFile();
-                if (!created) {
-                    throw new IOException("Could not create file " + file.getAbsolutePath());
-                }
-                System.out.println("Created file at: " + file.getAbsolutePath());
-            } catch (IOException exception) {
-                System.out.println(exception.getMessage());
-                throw new RuntimeException(exception);
+            boolean created = file.createNewFile();
+            if (!created) {
+                throw new IOException("File creating failed, file already exists!: " + file.getAbsoluteFile());
+
             }
         }
     }
@@ -79,9 +73,9 @@ public class Storage {
      * @return an ArrayList of strings representing the lines in the file
      * @throws RuntimeException if the file cannot be found after ensuring existence
      */
-    public ArrayList<String> readFile() {
-        ensureFileExists(this.file);
+    public ArrayList<String> readFile() throws IOException {
         ArrayList<String> lines = new ArrayList<>();
+        ensureFileExists(file);
 
         try (Scanner scanner = new Scanner(this.file)) {
             while (scanner.hasNextLine()) {

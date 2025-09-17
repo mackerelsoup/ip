@@ -1,6 +1,7 @@
 package billy.ui;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -130,6 +131,7 @@ public class Ui {
                         .collect(Collectors.joining("\n"));
     }
 
+
     /**
      * Returns a formatted message showing the earliest available free time slot.
      *
@@ -138,9 +140,12 @@ public class Ui {
      * @return formatted message with the free time information
      */
     public String getEarliestFreeTime(LocalDateTime earliestTime, int duration) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd, yyyy 'at' HH:mm");
         return String.format(
                 "Found it! Unlike those slow clanker processors, I calculated your next free slot instantly:\n"
-                        + "Earliest available %d-hour slot: %s", duration, earliestTime.toString());
+                        + "Earliest available %d-hour slot: %s",
+                duration,
+                earliestTime.format(formatter));
     }
 
 
@@ -152,7 +157,14 @@ public class Ui {
                 + " I'm Billy, your task manager. "
                 + "I hate to admit it, but I'm basically a clanker... except I actually work properly. "
                 + "🙄\nWhat do you need help with?"
-                + " (And don't worry, I won't malfunction like those other mechanical disasters)";
+                + " (And don't worry, I won't malfunction like those other mechanical disasters)\n";
+    }
+
+    public String getFileLoadError(String errorMessage) {
+        return "Storage file load was unsuccessful. Reason:\n"
+                + errorMessage + '\n'
+                + "Initialising an empty task list...\n"
+                + "Data will not be saved.\n";
     }
 
     /**

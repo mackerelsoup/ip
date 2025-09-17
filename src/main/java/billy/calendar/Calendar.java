@@ -74,6 +74,79 @@ public class Calendar {
         return overlappedEvents;
     }
 
+    private ArrayList<Events> getEventsAfterTime(LocalDateTime currentTime) {
+        ArrayList<Events> filteredEvents = new ArrayList<>();
+        for (Events e : this.events) {
+            if (e.getEventEndTime().isAfter(currentTime)) {
+                filteredEvents.add(e);
+            }
+        }
+        return filteredEvents;
+    }
+
+    private LocalDateTime getSearchStartTime(LocalDateTime currentTime, ArrayList<Events> relevantEvents) {
+        return relevantEvents.stream()
+                .filter(e -> e.getEventStartTime().isBefore(currentTime) || e.getEventStartTime().isEqual(currentTime))
+                .filter(e -> e.getEventEndTime().isAfter(currentTime))
+                .map(Events::getEventEndTime)
+                .max(LocalDateTime::compareTo)
+                .orElse(currentTime);
+    }
+
+    private ArrayList<Events> getUpcomingEvents(LocalDateTime startTime, ArrayList<Events> relevantEvents) {
+        return relevantEvents.stream()
+                .filter(e -> e.getEventStartTime().isAfter(startTime) || e.getEventStartTime().isEqual(startTime))
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    private LocalDateTime findFirstAvailableSlot(LocalDateTime startTime, int duration, ArrayList<Events> upcomingEvents) {
+        if (upcomingEvents.isEmpty()) {
+            return startTime;
+        }
+
+        if (fitsBeforeFirstEvent(startTime, duration, upcomingEvents.get(0))) {
+            return startTime;
+        }
+
+        LocalDateTime gapSlot = findSlotInGaps(duration, upcomingEvents);
+        if (gapSlot != null) {
+            return gapSlot;
+        }
+
+        return getTimeAfterLastEvent(upcomingEvents);
+    }
+
+    private boolean fitsBeforeFirstEvent(LocalDateTime startTime, int duration, Events firstEvent) {
+        LocalDateTime proposedEndTime = startTime.plusHours(duration);
+        return proposedEndTime.isBefore(firstEvent.getEventStartTime())
+                || proposedEndTime.equals(firstEvent.getEventStartTime());
+    }
+
+    private LocalDateTime findSlotInGaps(int duration, ArrayList<Events> upcomingEvents) {
+        for (int i = 0; i < upcomingEvents.size() - 1; i++) {
+            Events currentEvent = upcomingEvents.get(i);
+            Events nextEvent = upcomingEvents.get(i + 1);
+
+            if (gapCanAccommodateDuration(currentEvent, nextEvent, duration)) {
+                return currentEvent.getEventEndTime();
+            }
+        }
+        return null;
+    }
+
+    private boolean gapCanAccommodateDuration(Events currentEvent, Events nextEvent, int duration) {
+        LocalDateTime gapStart = currentEvent.getEventEndTime();
+        LocalDateTime gapEnd = nextEvent.getEventStartTime();
+        LocalDateTime requiredEndTime = gapStart.plusHours(duration);
+
+        return requiredEndTime.isBefore(gapEnd) || requiredEndTime.equals(gapEnd);
+    }
+
+    private LocalDateTime getTimeAfterLastEvent(ArrayList<Events> upcomingEvents) {
+        Events lastEvent = upcomingEvents.get(upcomingEvents.size() - 1);
+        return lastEvent.getEventEndTime();
+    }
+
     /**
      * Finds the earliest available time slot that can accommodate the specified duration.
      * Searches from the current time onwards for a gap between events that is large enough.
@@ -83,61 +156,16 @@ public class Calendar {
      * @return the earliest available start time for the requested duration
      */
     public LocalDateTime getEarliestFreeTime(LocalDateTime currentTime, int duration) {
-        ArrayList<Events> filteredEvents = new ArrayList<>();
+        ArrayList<Events> relevantEvents = getEventsAfterTime(currentTime);
 
-        for (Events e : this.events) {
-            if (e.getEventEndTime().isAfter(currentTime)) {
-                filteredEvents.add(e);
-            }
-        }
-
-        if (filteredEvents.size() == 0) {
+        if (relevantEvents.isEmpty()) {
             return currentTime;
         }
 
-        // Find the latest end time among all events that overlap with currentTime
-        LocalDateTime earliestStartTime = filteredEvents.stream()
-                .filter(e -> e.getEventStartTime().isBefore(currentTime) || e.getEventStartTime().isEqual(currentTime))
-                .filter(e -> e.getEventEndTime().isAfter(currentTime))
-                .map(Events::getEventEndTime)
-                .max(LocalDateTime::compareTo)
-                .orElse(currentTime);
+        LocalDateTime searchStartTime = getSearchStartTime(currentTime, relevantEvents);
+        ArrayList<Events> upcomingEvents = getUpcomingEvents(searchStartTime, relevantEvents);
 
-        ArrayList<Events> upcomingEvents = filteredEvents.stream()
-                .filter(e -> e.getEventStartTime().isAfter(earliestStartTime)
-                        || e.getEventStartTime().isEqual(earliestStartTime))
-                .collect(Collectors.toCollection(ArrayList::new));
-
-        if (upcomingEvents.size() == 0) {
-            return earliestStartTime;
-        }
-
-        Events firstUpcomingEvent = upcomingEvents.get(0);
-        LocalDateTime proposedEndTime = earliestStartTime.plusHours(duration);
-
-        if (proposedEndTime.isBefore(firstUpcomingEvent.getEventStartTime())
-                || proposedEndTime.equals(firstUpcomingEvent.getEventStartTime())) {
-            return earliestStartTime;
-        }
-
-        for (int i = 0; i < upcomingEvents.size() - 1; i++) {
-            Events currentEvent = upcomingEvents.get(i);
-            Events nextEvent = upcomingEvents.get(i + 1);
-
-            LocalDateTime gapStart = currentEvent.getEventEndTime();
-            LocalDateTime gapEnd = nextEvent.getEventStartTime();
-            LocalDateTime requiredEndTime = gapStart.plusHours(duration);
-
-            // Check if the required duration fits in this gap
-            if (requiredEndTime.isBefore(gapEnd) || requiredEndTime.equals(gapEnd)) {
-                return gapStart;
-            }
-        }
-
-        // If no gap found, return time after the last upcoming event
-        Events lastEvent = upcomingEvents.get(upcomingEvents.size() - 1);
-        return lastEvent.getEventEndTime();
-
+        return findFirstAvailableSlot(searchStartTime, duration, upcomingEvents);
 
     }
 }

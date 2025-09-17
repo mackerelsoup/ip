@@ -31,5 +31,9 @@ public abstract class Command {
     public Boolean shouldExit() {
         return isExit;
     }
+    
+    public String getInput() {
+        return input;
+    }
 
 }

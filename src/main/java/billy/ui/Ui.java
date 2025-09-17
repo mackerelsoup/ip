@@ -18,17 +18,21 @@ public class Ui {
      * Returns the total number of tasks message.
      */
     public String getNumberOfTasks(TaskList taskList) {
-        return "Now you have " + taskList.getSize() + " task(s) in the list\n";
+        int size = taskList.getSize();
+        return "You now have " + size + (size == 1 ? " task" : " tasks") + " in your list.";
     }
 
     /**
      * Returns a string representation of the full task list.
      */
     public String getTaskList(TaskList taskList) {
-        return "Here are the tasks in your list:\n"
+        if (taskList.getSize() == 0) {
+            return "Your task list is empty. Add some tasks to get started!";
+        }
+        return "Here are your tasks:\n"
                 + IntStream.range(0, taskList.getSize())
                         .mapToObj(i -> (i + 1) + ". " + taskList.getTask(i).getStatus())
-                        .collect(Collectors.joining("\n")) + "\n";
+                        .collect(Collectors.joining("\n"));
     }
 
 
@@ -36,13 +40,16 @@ public class Ui {
      * Returns a string of matching tasks.
      */
     public String getMatchingTasks(List<Task> matchingTasks) {
-        return "Here are the matching tasks in your list:\n"
+        if (matchingTasks.isEmpty()) {
+            return "No matching tasks found. Try a different search term.";
+        }
+        return "Found " + matchingTasks.size() + " matching task" + (matchingTasks.size() == 1 ? "" : "s") + ":\n"
                 + IntStream.range(0, matchingTasks.size())
                         .mapToObj(i -> {
                             Task task = matchingTasks.get(i);
-                            return (i + 1) + "." + task.getStatusIcon() + " " + task.getDescription();
+                            return (i + 1) + ". " + task.getStatusIcon() + " " + task.getDescription();
                         })
-                        .collect(Collectors.joining("\n")) + "\n";
+                        .collect(Collectors.joining("\n"));
     }
 
 
@@ -51,16 +58,16 @@ public class Ui {
      */
     public String getAddTask(TaskList taskList) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Got it, I've added this task:\n  ");
+        sb.append("✓ Task added successfully:\n  ");
         sb.append(taskList.getLatestTask().getStatus()).append("\n");
         sb.append(getNumberOfTasks(taskList));
         return sb.toString();
     }
 
     public String getAddConflictingEvent(ArrayList<Events> conflictingTasks) {
-        return "These events are conflicting with the event you have added:\n"
+        return "⚠Warning: The following events conflict with your new event:\n"
                 + conflictingTasks.stream()
-                .map(task -> task.getStatus())
+                .map(task -> "• " + task.getStatus())
                 .collect(Collectors.joining("\n"));
     }
 
@@ -69,7 +76,7 @@ public class Ui {
      */
     public String getMarkTask(TaskList taskList, int index) {
         Task t = taskList.getTask(index);
-        return "Nice! I've marked this task as done:\n    " + t.getStatus() + "\n";
+        return "✓ Great! Task completed:\n  " + t.getStatus();
     }
 
     /**
@@ -77,7 +84,7 @@ public class Ui {
      */
     public String getUnmarkTask(TaskList taskList, int index) {
         Task t = taskList.getTask(index);
-        return "Ok! I've marked this task as not done yet:\n    " + t.getStatus() + "\n";
+        return "Task unmarked:\n  " + t.getStatus();
     }
 
     /**
@@ -85,7 +92,7 @@ public class Ui {
      */
     public String getRemoveTask(TaskList taskList, Task task) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Noted, I've removed this task:\n    ");
+        sb.append("✓ Task removed:\n  ");
         sb.append(task.getStatus()).append("\n");
         sb.append(getNumberOfTasks(taskList));
         return sb.toString();
@@ -95,10 +102,13 @@ public class Ui {
      * Returns a string of all tasks loaded from storage.
      */
     public String getListLoaded(ArrayList<Task> taskList) {
-        return "List loaded:\n"
+        if (taskList.isEmpty()) {
+            return "Welcome! Your task list is empty. Start by adding some tasks.";
+        }
+        return "Welcome back! Loaded " + taskList.size() + " task" + (taskList.size() == 1 ? "" : "s") + " from storage:\n"
                 + taskList.stream()
                         .map(Task::getStatus)
-                        .collect(Collectors.joining("\n")) + "\n";
+                        .collect(Collectors.joining("\n"));
     }
 
     /**
@@ -109,9 +119,8 @@ public class Ui {
      * @return formatted message with the free time information
      */
     public String getEarliestFreeTime(LocalDateTime earliestTime, int duration) {
-        return String.format("The earliest time with free %d hour time slot is at: ", duration)
-                + earliestTime.toString()
-                + "\n";
+        return String.format("✅ Found your next free slot!\nEarliest available %d-hour slot: %s", 
+                duration, earliestTime.toString());
     }
 
 
@@ -119,21 +128,21 @@ public class Ui {
      * Returns the introduction message.
      */
     public String getIntro() {
-        return "Hello, I'm Billy!\nWhat can I do for you?\n";
+        return "Hello! I'm Billy, your personal task manager. 😊\nI can help you add, manage, and organize your tasks. What would you like to do?";
     }
 
     /**
      * Returns the goodbye message.
      */
     public String getBye() {
-        return "Bye. Hope to see you again soon!\n";
+        return "Goodbye! Have a productive day! 👋";
     }
 
     /**
      * Returns an invalid index message.
      */
     public String getInvalidIndexMessage() {
-        return "Enter a valid index\n";
+        return "⚠Please enter a valid task number.";
     }
 
     /**
@@ -143,20 +152,20 @@ public class Ui {
      * @return formatted error message with newline
      */
     public String getIllegalArgumentMessage(String message) {
-        return message + "\n";
+        return "⚠" + message;
     }
 
     /**
      * Returns a message for out-of-range task numbers.
      */
     public String getOutOfRangeMessage() {
-        return "Task number is out of range\n";
+        return "⚠Task number is out of range. Please check your task list.";
     }
 
     /**
      * Returns a message for unknown errors.
      */
     public String getUnknownErrorMessage() {
-        return "An unknown error occurred\n";
+        return "❌ Oops! Something went wrong. Please try again.";
     }
 }
